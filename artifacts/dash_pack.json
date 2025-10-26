@@ -1,0 +1,989 @@
+{
+  "PUNE": {
+    "incentives": [
+      {
+        "store": "BSPUN-BIBWEWADI-BGS3",
+        "base_pay": 5926.4200439453125,
+        "incentive_total": 2096.4199829101562,
+        "surge_payout": 190,
+        "peak_hour_payout": 360,
+        "minimum_guarantee": 2386.675048828125
+      },
+      {
+        "store": "BSPUN-JAGDISHNAGAR-BS2",
+        "base_pay": 4298.85986328125,
+        "incentive_total": 1598.8599853515625,
+        "surge_payout": 165,
+        "peak_hour_payout": 0,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "BSPUN-KSQARE-BANER-BS1",
+        "base_pay": 1969.1500244140625,
+        "incentive_total": 1069.1500244140625,
+        "surge_payout": 5,
+        "peak_hour_payout": 620,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "BSPUN-WAKAD-BS1",
+        "base_pay": 119929.8896484375,
+        "incentive_total": 44254.89025878906,
+        "surge_payout": 2225,
+        "peak_hour_payout": 50,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "T1EX-PUN-AUNDH",
+        "base_pay": 5963.14990234375,
+        "incentive_total": 2703.14990234375,
+        "surge_payout": 35,
+        "peak_hour_payout": 660,
+        "minimum_guarantee": 600.0
+      },
+      {
+        "store": "T1EX-PUN-BANER",
+        "base_pay": 23744.72021484375,
+        "incentive_total": 7964.7198486328125,
+        "surge_payout": 275,
+        "peak_hour_payout": 70,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "T1EX-PUN-BAVDHAN",
+        "base_pay": 0.0,
+        "incentive_total": 0.0,
+        "surge_payout": 0,
+        "peak_hour_payout": 0,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "T1EX-PUN-BLUERIDGE",
+        "base_pay": 30311.2509765625,
+        "incentive_total": 16011.249755859375,
+        "surge_payout": 620,
+        "peak_hour_payout": 6010,
+        "minimum_guarantee": 1500.0
+      },
+      {
+        "store": "T1EX-PUN-CHINCHWADGAON",
+        "base_pay": 15417.98046875,
+        "incentive_total": 8292.98046875,
+        "surge_payout": 95,
+        "peak_hour_payout": 60,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "T1EX-PUN-HINJEWADIPHASE3",
+        "base_pay": 2135.56005859375,
+        "incentive_total": 685.5599975585938,
+        "surge_payout": 15,
+        "peak_hour_payout": 0,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "T1EX-PUN-NIGDI",
+        "base_pay": 3105.64990234375,
+        "incentive_total": 1080.6500244140625,
+        "surge_payout": 130,
+        "peak_hour_payout": 0,
+        "minimum_guarantee": 1567.949951171875
+      },
+      {
+        "store": "T1EX-PUN-PIMPLEGURAV",
+        "base_pay": 3188.449951171875,
+        "incentive_total": 1063.449951171875,
+        "surge_payout": 45,
+        "peak_hour_payout": 0,
+        "minimum_guarantee": 1619.625
+      },
+      {
+        "store": "T1EX-PUN-PUNAWALE",
+        "base_pay": 3028.10009765625,
+        "incentive_total": 1278.0999755859375,
+        "surge_payout": 170,
+        "peak_hour_payout": 0,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "T1EX-PUN-RAVET",
+        "base_pay": 1295.0,
+        "incentive_total": 545.0,
+        "surge_payout": 15,
+        "peak_hour_payout": 310,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "T1EX-PUN-SHIVAJINAGAR",
+        "base_pay": 1420.6500244140625,
+        "incentive_total": 670.6500244140625,
+        "surge_payout": 0,
+        "peak_hour_payout": 120,
+        "minimum_guarantee": 250.0
+      },
+      {
+        "store": "T1EX-PUN-SINHAGADROAD",
+        "base_pay": 160.0,
+        "incentive_total": 40.0,
+        "surge_payout": 0,
+        "peak_hour_payout": 40,
+        "minimum_guarantee": 0.0
+      },
+      {
+        "store": "T1EX-PUN-SUS",
+        "base_pay": 9233.5498046875,
+        "incentive_total": 4433.550048828125,
+        "surge_payout": 165,
+        "peak_hour_payout": 1970,
+        "minimum_guarantee": 5000.0
+      },
+      {
+        "store": "T1EX-PUN-WADGAONSHERI",
+        "base_pay": 4667.10009765625,
+        "incentive_total": 1467.0999755859375,
+        "surge_payout": 230,
+        "peak_hour_payout": 0,
+        "minimum_guarantee": 2653.10009765625
+      },
+      {
+        "store": "T1EX-PUN-WANOWARI",
+        "base_pay": 114.8499984741211,
+        "incentive_total": 39.84999847412109,
+        "surge_payout": 0,
+        "peak_hour_payout": 0,
+        "minimum_guarantee": 106.9250030517578
+      }
+    ],
+    "payouts": [
+      {
+        "store": "BSPUN-BIBWEWADI-BGS3",
+        "final_with_gst": 10206.403921386718,
+        "management_fee": 306.4,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 8343.094848632812
+      },
+      {
+        "store": "BSPUN-JAGDISHNAGAR-BS2",
+        "final_with_gst": 5135.194638671875,
+        "management_fee": 216.0,
+        "deductions_amount": 55,
+        "total_cash_adjustment": 423,
+        "net_after_adj": 4135.85986328125
+      },
+      {
+        "store": "BSPUN-KSQARE-BANER-BS1",
+        "final_with_gst": 2408.5570288085937,
+        "management_fee": 72.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 1969.1500244140625
+      },
+      {
+        "store": "BSPUN-WAKAD-BS1",
+        "final_with_gst": 147145.86978515625,
+        "management_fee": 6054.0,
+        "deductions_amount": 850,
+        "total_cash_adjustment": 2226,
+        "net_after_adj": 118645.8896484375
+      },
+      {
+        "store": "T1EX-PUN-AUNDH",
+        "final_with_gst": 8677.660884765624,
+        "management_fee": 260.8,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 7093.14990234375
+      },
+      {
+        "store": "T1EX-PUN-BANER",
+        "final_with_gst": 27739.58185351563,
+        "management_fee": 1262.4,
+        "deductions_amount": 700,
+        "total_cash_adjustment": 1483,
+        "net_after_adj": 22245.72021484375
+      },
+      {
+        "store": "T1EX-PUN-BAVDHAN",
+        "final_with_gst": 0.0,
+        "management_fee": 0.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 0.0
+      },
+      {
+        "store": "T1EX-PUN-BLUERIDGE",
+        "final_with_gst": 37678.87615234375,
+        "management_fee": 1144.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 30787.2509765625
+      },
+      {
+        "store": "T1EX-PUN-CHINCHWADGAON",
+        "final_with_gst": 17822.696953125,
+        "management_fee": 570.0,
+        "deductions_amount": 649,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 14533.98046875
+      },
+      {
+        "store": "T1EX-PUN-HINJEWADIPHASE3",
+        "final_with_gst": 2728.820869140625,
+        "management_fee": 116.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 2196.56005859375
+      },
+      {
+        "store": "T1EX-PUN-NIGDI",
+        "final_with_gst": 5600.988115234375,
+        "management_fee": 162.0,
+        "deductions_amount": 114,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 4584.60009765625
+      },
+      {
+        "store": "T1EX-PUN-PIMPLEGURAV",
+        "final_with_gst": 5909.52873046875,
+        "management_fee": 170.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 4838.0751953125
+      },
+      {
+        "store": "T1EX-PUN-PUNAWALE",
+        "final_with_gst": 3750.158115234375,
+        "management_fee": 140.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 3038.10009765625
+      },
+      {
+        "store": "T1EX-PUN-RAVET",
+        "final_with_gst": 1598.9,
+        "management_fee": 60.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 790,
+        "net_after_adj": 1295.0
+      },
+      {
+        "store": "T1EX-PUN-SHIVAJINAGAR",
+        "final_with_gst": 2042.1670288085936,
+        "management_fee": 60.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 1670.6500244140625
+      },
+      {
+        "store": "T1EX-PUN-SINHAGADROAD",
+        "final_with_gst": 200.128,
+        "management_fee": 9.6,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 160.0
+      },
+      {
+        "store": "T1EX-PUN-SUS",
+        "final_with_gst": 19154.998769531252,
+        "management_fee": 384.0,
+        "deductions_amount": 180,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 15849.0498046875
+      },
+      {
+        "store": "T1EX-PUN-WADGAONSHERI",
+        "final_with_gst": 8969.41623046875,
+        "management_fee": 256.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 7345.2001953125
+      },
+      {
+        "store": "T1EX-PUN-WANOWARI",
+        "final_with_gst": 268.7744927978516,
+        "management_fee": 6.0,
+        "deductions_amount": 0,
+        "total_cash_adjustment": 0,
+        "net_after_adj": 221.7749938964844
+      }
+    ],
+    "productivity": [
+      {
+        "store": "BSPUN-BIBWEWADI-BGS3",
+        "total_orders": 152,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 375.2800064086914,
+        "orders_per_day": 23.384615384615383,
+        "avg_dist_per_order": 2.468947410583496
+      },
+      {
+        "store": "BSPUN-JAGDISHNAGAR-BS2",
+        "total_orders": 108,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 267.0799865722656,
+        "orders_per_day": 16.615384615384617,
+        "avg_dist_per_order": 2.472962838632089
+      },
+      {
+        "store": "BSPUN-KSQARE-BANER-BS1",
+        "total_orders": 30,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 102.0999984741211,
+        "orders_per_day": 4.615384615384615,
+        "avg_dist_per_order": 3.403333282470703
+      },
+      {
+        "store": "BSPUN-WAKAD-BS1",
+        "total_orders": 2547,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 5308.850035309792,
+        "orders_per_day": 391.84615384615387,
+        "avg_dist_per_order": 2.0843541559912806
+      },
+      {
+        "store": "T1EX-PUN-AUNDH",
+        "total_orders": 122,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 279.1400146484375,
+        "orders_per_day": 18.76923076923077,
+        "avg_dist_per_order": 2.2880329069544056
+      },
+      {
+        "store": "T1EX-PUN-BANER",
+        "total_orders": 559,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 1135.7700004577637,
+        "orders_per_day": 86.0,
+        "avg_dist_per_order": 2.0317889095845505
+      },
+      {
+        "store": "T1EX-PUN-BAVDHAN",
+        "total_orders": 0,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 4.03000020980835,
+        "orders_per_day": 0.0,
+        "avg_dist_per_order": null
+      },
+      {
+        "store": "T1EX-PUN-BLUERIDGE",
+        "total_orders": 572,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 1603.0700225830078,
+        "orders_per_day": 88.0,
+        "avg_dist_per_order": 2.802569969550713
+      },
+      {
+        "store": "T1EX-PUN-CHINCHWADGAON",
+        "total_orders": 285,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 633.780029296875,
+        "orders_per_day": 43.84615384615385,
+        "avg_dist_per_order": 2.223789576480263
+      },
+      {
+        "store": "T1EX-PUN-HINJEWADIPHASE3",
+        "total_orders": 58,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 117.0,
+        "orders_per_day": 8.923076923076923,
+        "avg_dist_per_order": 2.0172413793103448
+      },
+      {
+        "store": "T1EX-PUN-NIGDI",
+        "total_orders": 81,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 197.3800048828125,
+        "orders_per_day": 12.461538461538462,
+        "avg_dist_per_order": 2.436790183738426
+      },
+      {
+        "store": "T1EX-PUN-PIMPLEGURAV",
+        "total_orders": 85,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 208.00999450683597,
+        "orders_per_day": 13.076923076923077,
+        "avg_dist_per_order": 2.447176405962776
+      },
+      {
+        "store": "T1EX-PUN-PUNAWALE",
+        "total_orders": 70,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 131.13999938964844,
+        "orders_per_day": 10.76923076923077,
+        "avg_dist_per_order": 1.8734285627092635
+      },
+      {
+        "store": "T1EX-PUN-RAVET",
+        "total_orders": 30,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 68.02999877929688,
+        "orders_per_day": 4.615384615384615,
+        "avg_dist_per_order": 2.2676666259765623
+      },
+      {
+        "store": "T1EX-PUN-SHIVAJINAGAR",
+        "total_orders": 30,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 61.5,
+        "orders_per_day": 4.615384615384615,
+        "avg_dist_per_order": 2.05
+      },
+      {
+        "store": "T1EX-PUN-SINHAGADROAD",
+        "total_orders": 4,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 9.109999656677246,
+        "orders_per_day": 0.6153846153846154,
+        "avg_dist_per_order": 2.2774999141693115
+      },
+      {
+        "store": "T1EX-PUN-SUS",
+        "total_orders": 192,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 347.91999864578247,
+        "orders_per_day": 29.53846153846154,
+        "avg_dist_per_order": 1.812083326280117
+      },
+      {
+        "store": "T1EX-PUN-WADGAONSHERI",
+        "total_orders": 128,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 252.82000732421875,
+        "orders_per_day": 19.692307692307693,
+        "avg_dist_per_order": 1.975156307220459
+      },
+      {
+        "store": "T1EX-PUN-WANOWARI",
+        "total_orders": 3,
+        "attendance": null,
+        "online_hours": null,
+        "distance_km": 8.0,
+        "orders_per_day": 0.46153846153846156,
+        "avg_dist_per_order": 2.6666666666666665
+      }
+    ],
+    "weekend": [
+      {
+        "store": "BSPUN-BIBWEWADI-BGS3",
+        "weekday_orders": 108,
+        "weekend_orders": 44
+      },
+      {
+        "store": "BSPUN-JAGDISHNAGAR-BS2",
+        "weekday_orders": 52,
+        "weekend_orders": 56
+      },
+      {
+        "store": "BSPUN-KSQARE-BANER-BS1",
+        "weekday_orders": 30,
+        "weekend_orders": 0
+      },
+      {
+        "store": "BSPUN-WAKAD-BS1",
+        "weekday_orders": 1838,
+        "weekend_orders": 709
+      },
+      {
+        "store": "T1EX-PUN-AUNDH",
+        "weekday_orders": 65,
+        "weekend_orders": 57
+      },
+      {
+        "store": "T1EX-PUN-BANER",
+        "weekday_orders": 446,
+        "weekend_orders": 113
+      },
+      {
+        "store": "T1EX-PUN-BAVDHAN",
+        "weekday_orders": 0,
+        "weekend_orders": 0
+      },
+      {
+        "store": "T1EX-PUN-BLUERIDGE",
+        "weekday_orders": 422,
+        "weekend_orders": 150
+      },
+      {
+        "store": "T1EX-PUN-CHINCHWADGAON",
+        "weekday_orders": 219,
+        "weekend_orders": 66
+      },
+      {
+        "store": "T1EX-PUN-HINJEWADIPHASE3",
+        "weekday_orders": 58,
+        "weekend_orders": 0
+      },
+      {
+        "store": "T1EX-PUN-NIGDI",
+        "weekday_orders": 48,
+        "weekend_orders": 33
+      },
+      {
+        "store": "T1EX-PUN-PIMPLEGURAV",
+        "weekday_orders": 85,
+        "weekend_orders": 0
+      },
+      {
+        "store": "T1EX-PUN-PUNAWALE",
+        "weekday_orders": 42,
+        "weekend_orders": 28
+      },
+      {
+        "store": "T1EX-PUN-RAVET",
+        "weekday_orders": 20,
+        "weekend_orders": 10
+      },
+      {
+        "store": "T1EX-PUN-SHIVAJINAGAR",
+        "weekday_orders": 30,
+        "weekend_orders": 0
+      },
+      {
+        "store": "T1EX-PUN-SINHAGADROAD",
+        "weekday_orders": 4,
+        "weekend_orders": 0
+      },
+      {
+        "store": "T1EX-PUN-SUS",
+        "weekday_orders": 148,
+        "weekend_orders": 44
+      },
+      {
+        "store": "T1EX-PUN-WADGAONSHERI",
+        "weekday_orders": 82,
+        "weekend_orders": 46
+      },
+      {
+        "store": "T1EX-PUN-WANOWARI",
+        "weekday_orders": 3,
+        "weekend_orders": 0
+      }
+    ],
+    "ramp": [
+      {
+        "store": "BSPUN-BIBWEWADI-BGS3",
+        "new_median": 8581.579384765624,
+        "exp_median": 1624.8245366210938,
+        "delta": 6956.8
+      },
+      {
+        "store": "BSPUN-JAGDISHNAGAR-BS2",
+        "new_median": null,
+        "exp_median": 5135.194638671875,
+        "delta": null
+      },
+      {
+        "store": "BSPUN-KSQARE-BANER-BS1",
+        "new_median": null,
+        "exp_median": 2408.5570288085937,
+        "delta": null
+      },
+      {
+        "store": "BSPUN-WAKAD-BS1",
+        "new_median": null,
+        "exp_median": 7575.835999999999,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-AUNDH",
+        "new_median": null,
+        "exp_median": 8677.660884765624,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-BANER",
+        "new_median": null,
+        "exp_median": 3111.188,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-BAVDHAN",
+        "new_median": 0.0,
+        "exp_median": null,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-BLUERIDGE",
+        "new_median": null,
+        "exp_median": 6042.13123046875,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-CHINCHWADGAON",
+        "new_median": null,
+        "exp_median": 17822.696953125,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-HINJEWADIPHASE3",
+        "new_median": null,
+        "exp_median": 2728.820869140625,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-NIGDI",
+        "new_median": 5600.988115234375,
+        "exp_median": null,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-PIMPLEGURAV",
+        "new_median": 5909.52873046875,
+        "exp_median": null,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-PUNAWALE",
+        "new_median": null,
+        "exp_median": 3750.158115234375,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-RAVET",
+        "new_median": null,
+        "exp_median": 1598.9,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-SHIVAJINAGAR",
+        "new_median": null,
+        "exp_median": 2042.1670288085936,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-SINHAGADROAD",
+        "new_median": null,
+        "exp_median": 200.128,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-SUS",
+        "new_median": null,
+        "exp_median": 6376.72,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-WADGAONSHERI",
+        "new_median": 8969.41623046875,
+        "exp_median": null,
+        "delta": null
+      },
+      {
+        "store": "T1EX-PUN-WANOWARI",
+        "new_median": 268.7744927978516,
+        "exp_median": null,
+        "delta": null
+      }
+    ],
+    "risk": [
+      {
+        "store": "BSPUN-BIBWEWADI-BGS3",
+        "cv": 0.9639376544499981
+      },
+      {
+        "store": "BSPUN-JAGDISHNAGAR-BS2",
+        "cv": null
+      },
+      {
+        "store": "BSPUN-KSQARE-BANER-BS1",
+        "cv": null
+      },
+      {
+        "store": "BSPUN-WAKAD-BS1",
+        "cv": 0.7332760380837667
+      },
+      {
+        "store": "T1EX-PUN-AUNDH",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-BANER",
+        "cv": 1.0774310146397499
+      },
+      {
+        "store": "T1EX-PUN-BAVDHAN",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-BLUERIDGE",
+        "cv": 0.5290873278085892
+      },
+      {
+        "store": "T1EX-PUN-CHINCHWADGAON",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-HINJEWADIPHASE3",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-NIGDI",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-PIMPLEGURAV",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-PUNAWALE",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-RAVET",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-SHIVAJINAGAR",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-SINHAGADROAD",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-SUS",
+        "cv": 0.9804125126795549
+      },
+      {
+        "store": "T1EX-PUN-WADGAONSHERI",
+        "cv": null
+      },
+      {
+        "store": "T1EX-PUN-WANOWARI",
+        "cv": null
+      }
+    ],
+    "cohort": [
+      {
+        "store": "BSPUN-BIBWEWADI-BGS3",
+        "EV": 0.0,
+        "LSV": 0.5,
+        "NEV": 0.0,
+        "NEW JOINER": 0.5
+      },
+      {
+        "store": "BSPUN-JAGDISHNAGAR-BS2",
+        "EV": 0.0,
+        "LSV": 1.0,
+        "NEV": 0.0,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "BSPUN-KSQARE-BANER-BS1",
+        "EV": 0.0,
+        "LSV": 0.0,
+        "NEV": 1.0,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "BSPUN-WAKAD-BS1",
+        "EV": 0.0,
+        "LSV": 0.17647058823529413,
+        "NEV": 0.8235294117647058,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-AUNDH",
+        "EV": 0.0,
+        "LSV": 0.0,
+        "NEV": 1.0,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-BANER",
+        "EV": 0.16666666666666666,
+        "LSV": 0.16666666666666666,
+        "NEV": 0.6666666666666666,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-BAVDHAN",
+        "EV": 0.0,
+        "LSV": 0.0,
+        "NEV": 0.0,
+        "NEW JOINER": 1.0
+      },
+      {
+        "store": "T1EX-PUN-BLUERIDGE",
+        "EV": 0.2,
+        "LSV": 0.4,
+        "NEV": 0.4,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-CHINCHWADGAON",
+        "EV": 0.0,
+        "LSV": 1.0,
+        "NEV": 0.0,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-HINJEWADIPHASE3",
+        "EV": 0.0,
+        "LSV": 1.0,
+        "NEV": 0.0,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-NIGDI",
+        "EV": 0.0,
+        "LSV": 0.0,
+        "NEV": 0.0,
+        "NEW JOINER": 1.0
+      },
+      {
+        "store": "T1EX-PUN-PIMPLEGURAV",
+        "EV": 0.0,
+        "LSV": 0.0,
+        "NEV": 0.0,
+        "NEW JOINER": 1.0
+      },
+      {
+        "store": "T1EX-PUN-PUNAWALE",
+        "EV": 0.0,
+        "LSV": 1.0,
+        "NEV": 0.0,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-RAVET",
+        "EV": 0.0,
+        "LSV": 1.0,
+        "NEV": 0.0,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-SHIVAJINAGAR",
+        "EV": 0.0,
+        "LSV": 1.0,
+        "NEV": 0.0,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-SINHAGADROAD",
+        "EV": 0.0,
+        "LSV": 0.0,
+        "NEV": 1.0,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-SUS",
+        "EV": 0.0,
+        "LSV": 0.3333333333333333,
+        "NEV": 0.6666666666666666,
+        "NEW JOINER": 0.0
+      },
+      {
+        "store": "T1EX-PUN-WADGAONSHERI",
+        "EV": 0.0,
+        "LSV": 0.0,
+        "NEV": 0.0,
+        "NEW JOINER": 1.0
+      },
+      {
+        "store": "T1EX-PUN-WANOWARI",
+        "EV": 0.0,
+        "LSV": 0.0,
+        "NEV": 0.0,
+        "NEW JOINER": 1.0
+      }
+    ],
+    "leaderboard": [
+      {
+        "store": "BSPUN-BIBWEWADI-BGS3",
+        "earning_median": 5103.201960693359
+      },
+      {
+        "store": "BSPUN-JAGDISHNAGAR-BS2",
+        "earning_median": 5135.194638671875
+      },
+      {
+        "store": "BSPUN-KSQARE-BANER-BS1",
+        "earning_median": 2408.5570288085937
+      },
+      {
+        "store": "BSPUN-WAKAD-BS1",
+        "earning_median": 7575.835999999999
+      },
+      {
+        "store": "T1EX-PUN-AUNDH",
+        "earning_median": 8677.660884765624
+      },
+      {
+        "store": "T1EX-PUN-BANER",
+        "earning_median": 3111.188
+      },
+      {
+        "store": "T1EX-PUN-BAVDHAN",
+        "earning_median": 0.0
+      },
+      {
+        "store": "T1EX-PUN-BLUERIDGE",
+        "earning_median": 6042.13123046875
+      },
+      {
+        "store": "T1EX-PUN-CHINCHWADGAON",
+        "earning_median": 17822.696953125
+      },
+      {
+        "store": "T1EX-PUN-HINJEWADIPHASE3",
+        "earning_median": 2728.820869140625
+      },
+      {
+        "store": "T1EX-PUN-NIGDI",
+        "earning_median": 5600.988115234375
+      },
+      {
+        "store": "T1EX-PUN-PIMPLEGURAV",
+        "earning_median": 5909.52873046875
+      },
+      {
+        "store": "T1EX-PUN-PUNAWALE",
+        "earning_median": 3750.158115234375
+      },
+      {
+        "store": "T1EX-PUN-RAVET",
+        "earning_median": 1598.9
+      },
+      {
+        "store": "T1EX-PUN-SHIVAJINAGAR",
+        "earning_median": 2042.1670288085936
+      },
+      {
+        "store": "T1EX-PUN-SINHAGADROAD",
+        "earning_median": 200.128
+      },
+      {
+        "store": "T1EX-PUN-SUS",
+        "earning_median": 6376.72
+      },
+      {
+        "store": "T1EX-PUN-WADGAONSHERI",
+        "earning_median": 8969.41623046875
+      },
+      {
+        "store": "T1EX-PUN-WANOWARI",
+        "earning_median": 268.7744927978516
+      }
+    ]
+  }
+}

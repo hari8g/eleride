@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: ev-orchestrator-backend
+    env: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /healthz
+    dockerfilePath: backend/Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        # Update to your Render Postgres connection string
+        value: postgresql+psycopg://ev:evpass@db:5432/evdb
+      - key: CORS_ORIGINS
+        # Set to your Vercel URL when known, e.g. https://your-app.vercel.app
+        value: https://your-frontend.vercel.app
+      - key: MODEL_DIR
+        value: /models
+      - key: ETL_INPUT_PATH
+        value: /data/sample_jobs.csv
+

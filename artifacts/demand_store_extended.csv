@@ -1,0 +1,20 @@
+city,store,store_earning_index,earning_mean,earning_std,p25,p75,new_rider_ramp_score,demand_score,riders_week,orders_per_rider_week,orders_per_day,recommended_riders_day,best_shift,stars,color,idle_time_risk,playbook
+PUNE,T1EX-PUN-WADGAONSHERI,8969.4,8969.4,,8969.4,8969.4,8969.4,59.1,1,,,,10 AM–2 PM,★★★☆☆,yellow,,High earners here work 10 AM–2 PM and 5 days/week.
+PUNE,BSPUN-BIBWEWADI-BGS3,5103.2,5103.2,4919.168528175388,3364.0,6842.4,8581.6,48.2,2,,,,12–8 PM,★★☆☆☆,red,,High earners here work 12–8 PM and 5 days/week.
+PUNE,T1EX-PUN-PIMPLEGURAV,5909.5,5909.5,,5909.5,5909.5,5909.5,43.7,1,,,,10 AM–2 PM,★★☆☆☆,red,,High earners here work 10 AM–2 PM and 5 days/week.
+PUNE,T1EX-PUN-NIGDI,5601.0,5601.0,,5601.0,5601.0,5601.0,42.1,1,,,,10 AM–2 PM,★★☆☆☆,red,,High earners here work 10 AM–2 PM and 5 days/week.
+PUNE,T1EX-PUN-WANOWARI,268.8,268.8,,268.8,268.8,268.8,15.3,1,,,,10 AM–2 PM,★☆☆☆☆,red,,Work 10 AM–2 PM; aim for 2 shifts/day. Focus on peak windows.
+PUNE,T1EX-PUN-BAVDHAN,0.0,0.0,,0.0,0.0,0.0,13.9,1,,,,10 AM–2 PM,★☆☆☆☆,red,,Work 10 AM–2 PM; aim for 2 shifts/day. Focus on peak windows.
+PUNE,BSPUN-JAGDISHNAGAR-BS2,5135.2,5135.2,,5135.2,5135.2,,,1,,,,5–10 PM,★☆☆☆☆,red,,High earners here work 5–10 PM and 5 days/week.
+PUNE,BSPUN-KSQARE-BANER-BS1,2408.6,2408.6,,2408.6,2408.6,,,1,,,,10 AM–2 PM,★☆☆☆☆,red,,Work 10 AM–2 PM; aim for 2 shifts/day. Focus on peak windows.
+PUNE,BSPUN-WAKAD-BS1,7575.8,8655.6,6346.972965673483,4289.1,14230.6,,,17,,,,10 AM–2 PM,★☆☆☆☆,red,,High earners here work 10 AM–2 PM and 5 days/week.
+PUNE,T1EX-PUN-AUNDH,8677.7,8677.7,,8677.7,8677.7,,,1,,,,10 AM–2 PM,★☆☆☆☆,red,,High earners here work 10 AM–2 PM and 5 days/week.
+PUNE,T1EX-PUN-BANER,3111.2,4623.3,4981.24763701929,1677.8,4747.2,,,6,,,,10 AM–2 PM,★☆☆☆☆,red,,Work 10 AM–2 PM; aim for 2 shifts/day. Focus on peak windows.
+PUNE,T1EX-PUN-BLUERIDGE,6042.1,7535.8,3987.0831796548664,4416.3,10706.6,,,5,,,,12–8 PM,★☆☆☆☆,red,,High earners here work 12–8 PM and 5 days/week.
+PUNE,T1EX-PUN-CHINCHWADGAON,17822.7,17822.7,,17822.7,17822.7,,,1,,,,5–10 PM,★☆☆☆☆,red,,High earners here work 5–10 PM and 5 days/week.
+PUNE,T1EX-PUN-HINJEWADIPHASE3,2728.8,2728.8,,2728.8,2728.8,,,1,,,,5–10 PM,★☆☆☆☆,red,,Work 5–10 PM; aim for 2 shifts/day. Focus on peak windows.
+PUNE,T1EX-PUN-PUNAWALE,3750.2,3750.2,,3750.2,3750.2,,,1,,,,5–10 PM,★☆☆☆☆,red,,Work 5–10 PM; aim for 2 shifts/day. Focus on peak windows.
+PUNE,T1EX-PUN-RAVET,1598.9,1598.9,,1598.9,1598.9,,,1,,,,5–10 PM,★☆☆☆☆,red,,Work 5–10 PM; aim for 2 shifts/day. Focus on peak windows.
+PUNE,T1EX-PUN-SHIVAJINAGAR,2042.2,2042.2,,2042.2,2042.2,,,1,,,,5–10 PM,★☆☆☆☆,red,,Work 5–10 PM; aim for 2 shifts/day. Focus on peak windows.
+PUNE,T1EX-PUN-SINHAGADROAD,200.1,200.1,,200.1,200.1,,,1,,,,10 AM–2 PM,★☆☆☆☆,red,,Work 10 AM–2 PM; aim for 2 shifts/day. Focus on peak windows.
+PUNE,T1EX-PUN-SUS,6376.7,6385.0,6259.933491336639,3253.0,9512.9,,,3,,,,10 AM–2 PM,★☆☆☆☆,red,,High earners here work 10 AM–2 PM and 5 days/week.

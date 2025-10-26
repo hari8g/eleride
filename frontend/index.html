@@ -1,0 +1,289 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eleride Platform Orchestration</title>
+    <style>
+      table{width:100%;border-collapse:collapse}
+      #demand-table{table-layout:fixed}
+      #demand-table thead th{position:sticky;top:0;background:#f9fafb;border-bottom:1px solid #e5e7eb;z-index:1}
+      #demand-table th,#demand-table td{padding:8px;text-align:left;vertical-align:middle}
+      .badge{display:inline-block;padding:2px 8px;border-radius:9999px;border:1px solid #e5e7eb;background:#f9fafb;font-size:12px}
+      .chip{display:inline-block;padding:2px 8px;border-radius:6px;background:#eef2ff;border:1px solid #c7d2fe;font-size:12px}
+      .dot{display:inline-block;width:10px;height:10px;border-radius:9999px;margin-right:6px}
+      .dot.green{background:#10b981}.dot.yellow{background:#f59e0b}.dot.red{background:#ef4444}
+      .bar{background:#e5e7eb;border-radius:6px;overflow:hidden;height:10px}
+      .bar-fill{background:#10b981;height:100%}
+      .table-sm td{border-bottom:1px solid #f3f4f6}
+    </style>
+  </head>
+  <body>
+    <div style="max-width: 1100px; margin: 24px auto; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;">
+      <h1 style="margin-bottom: 8px;">EV Orchestrator</h1>
+      <div id="status" style="margin-bottom: 16px;">Checking backend...</div>
+
+      <nav style="display:flex; gap:8px; margin-bottom: 12px;">
+        <button id="tab-btn-demand" data-tab="demand" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#f9fafb; cursor:pointer;">Demand</button>
+        <button id="tab-btn-3pl" data-tab="threepl" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">3PL Capacity</button>
+        <button id="tab-btn-ride" data-tab="ride" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Per-ride Earnings</button>
+        <button id="tab-btn-incentives" data-tab="incentives" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Incentives</button>
+        <button id="tab-btn-payouts" data-tab="payouts" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Payouts</button>
+        <button id="tab-btn-hotspots" data-tab="hotspots" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Hotspots</button>
+        <button id="tab-btn-credit" data-tab="credit" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Credit Profiles</button>
+        <button id="tab-btn-mg" data-tab="mg" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">MG Guidance</button>
+      </nav>
+
+      
+
+      <section id="tab-demand" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select"><strong>City:</strong></label>
+          <select id="city-select" style="padding:6px 8px;"></select>
+          <div style="margin-left:auto; opacity:0.7;">Source: analytics artifacts</div>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
+          <div id="top-store-card" style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:16px; align-items:center; justify-content:space-between;">
+            <!-- populated by JS -->
+          </div>
+          <div style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px;">
+            <h2 style="margin: 0 0 8px 0; font-size: 18px;">Store Demand (by score)</h2>
+            <canvas id="demand-chart" height="240"></canvas>
+          </div>
+          <div style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; overflow:auto; max-height: 420px;">
+            <h2 style="margin: 0 0 8px 0; font-size: 18px;">Store Details</h2>
+            <table id="demand-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <colgroup>
+                <col style="width:35%">
+                <col style="width:25%">
+                <col style="width:20%">
+                <col style="width:10%">
+                <col style="width:10%">
+              </colgroup>
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>Score</th>
+                  <th>INR P25–P75</th>
+                  <th>Earning Idx</th>
+                  <th>Ramp</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="insights-pane" style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px;">
+            <h2 style="margin: 0 0 8px 0; font-size: 18px;">Store Insights</h2>
+            <div id="insights-store" style="font-weight:600; margin-bottom:8px;">—</div>
+            <div id="ins-metrics" style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+              <span class="chip">Orders/Rider (week): <strong id="ins-orders-per-rider">—</strong></span>
+              <span class="chip">Idle Risk: <strong id="ins-idle">—</strong></span>
+              <span class="chip">Recommended Riders/day: <strong id="ins-reco">—</strong></span>
+              <span class="chip">Riders/week: <strong id="ins-riders-week">—</strong></span>
+            </div>
+            <div style="opacity:.8;">Playbook</div>
+            <div id="ins-playbook" style="margin-top:4px;">—</div>
+            <hr style="margin:16px 0; border:none; border-top:1px solid #e5e7eb;" />
+            <h3 style="margin:0 0 8px 0; font-size:16px;">All Stores</h3>
+            <div id="insights-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-threepl" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-3pl"><strong>City:</strong></label>
+          <select id="city-select-3pl" style="padding:6px 8px;"></select>
+          <div style="margin-left:auto; opacity:0.7;">For fleet partners to plan capacity</div>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
+          <div style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px;">
+            <h2 style="margin: 0 0 8px 0; font-size: 18px;">Capacity Gap by Store</h2>
+            <canvas id="threepl-chart" height="260"></canvas>
+          </div>
+          <div style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; overflow:auto; max-height: 480px;">
+            <h2 style="margin: 0 0 8px 0; font-size: 18px;">3PL Planning Table</h2>
+            <table id="threepl-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>Demand Score</th>
+                  <th>Orders/day</th>
+                  <th>Recommended riders/day</th>
+                  <th>Current riders/day (est.)</th>
+                  <th>Capacity gap</th>
+                  <th>Best Shift</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-ride" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-ride"><strong>City:</strong></label>
+          <select id="city-select-ride" style="padding:6px 8px;"></select>
+          <label for="store-select-ride"><strong>Store:</strong></label>
+          <select id="store-select-ride" style="padding:6px 8px;"></select>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Per-ride earning distribution</h2>
+            <div id="ride-stats" style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;"></div>
+            <div class="bar" style="height:14px;">
+              <div id="ride-range-p25" class="bar-fill" style="width:0%; background:#93c5fd;"></div>
+              <div id="ride-range-med" class="bar-fill" style="width:0%; background:#3b82f6;"></div>
+              <div id="ride-range-p75" class="bar-fill" style="width:0%; background:#1d4ed8;"></div>
+            </div>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">All stores (city)</h2>
+            <table id="ride-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>Avg</th>
+                  <th>Median</th>
+                  <th>P25</th>
+                  <th>P75</th>
+                  <th>Std</th>
+                  <th>Samples</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-incentives" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-inc"><strong>City:</strong></label>
+          <select id="city-select-inc" style="padding:6px 8px;"></select>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Incentive Breakdown by Store</h2>
+            <canvas id="inc-chart" height="260"></canvas>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Incentives Table</h2>
+            <table id="inc-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>Base</th>
+                  <th>Incentives</th>
+                  <th>Surge</th>
+                  <th>Peak Hour</th>
+                  <th>MG</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-payouts" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-pay"><strong>City:</strong></label>
+          <select id="city-select-pay" style="padding:6px 8px;"></select>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Payout Components by Store</h2>
+            <canvas id="pay-chart" height="260"></canvas>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Payouts Table</h2>
+            <table id="pay-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>Final (GST)</th>
+                  <th>Mgmt Fee</th>
+                  <th>Deductions</th>
+                  <th>Cash Adj</th>
+                  <th>Net (arrears+deductions)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-hotspots" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <div>Hotspot intensity by historical jobs</div>
+        </section>
+        <section style="padding:0; border: 1px solid #e5e7eb; border-radius: 8px; overflow:hidden;">
+          <div id="map" style="height:480px;"></div>
+        </section>
+      </section>
+
+      <section id="tab-credit" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-credit"><strong>City:</strong></label>
+          <select id="city-select-credit" style="padding:6px 8px;"></select>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Credit Score Distribution</h2>
+            <canvas id="credit-chart" height="240"></canvas>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:480px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Driver Credit Profiles</h2>
+            <table id="credit-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Driver</th>
+                  <th>Store</th>
+                  <th>Score</th>
+                  <th>Band</th>
+                  <th>Median INR</th>
+                  <th>Orders/day</th>
+                  <th>Attendance/wk</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-mg" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-mg"><strong>City:</strong></label>
+          <select id="city-select-mg" style="padding:6px 8px;"></select>
+        </section>
+        <section style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:480px;">
+          <h2 style="margin:0 0 8px 0; font-size:18px;">Guidance to reach MG (per day)</h2>
+          <table id="mg-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <thead>
+              <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                <th>Driver</th>
+                <th>Store</th>
+                <th>MG/day</th>
+                <th>Current/day</th>
+                <th>Gap</th>
+                <th>Per-ride</th>
+                <th>Extra orders</th>
+                <th>Extra shifts</th>
+                <th>Recommendation</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+      </section>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+  </html>
+
+

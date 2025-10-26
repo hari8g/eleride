@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ev
+      POSTGRES_PASSWORD: evpass
+      POSTGRES_DB: evdb
+    volumes:
+      - ev_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ev -d evdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./.env
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql+psycopg://ev:evpass@db:5432/evdb}
+    volumes:
+      - ./backend:/app
+      - ./data:/data
+      - ./analytics:/app/analytics
+      - ./artifacts:/artifacts
+    ports:
+      - "8000:8000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /usr/src/app
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend:/usr/src/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - backend
+
+volumes:
+  ev_pgdata:
+
+

@@ -1,0 +1,175 @@
+{
+  "PUNE": [
+    {
+      "store": "BSPUN-BIBWEWADI-BGS3",
+      "per_ride_avg": 62.3,
+      "per_ride_median": 62.3,
+      "p25": 58.2,
+      "p75": 66.3,
+      "per_ride_std": 11.4,
+      "num_samples": 2
+    },
+    {
+      "store": "BSPUN-JAGDISHNAGAR-BS2",
+      "per_ride_avg": 47.5,
+      "per_ride_median": 47.5,
+      "p25": 47.5,
+      "p75": 47.5,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "BSPUN-KSQARE-BANER-BS1",
+      "per_ride_avg": 80.3,
+      "per_ride_median": 80.3,
+      "p25": 80.3,
+      "p75": 80.3,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "BSPUN-WAKAD-BS1",
+      "per_ride_avg": 52.7,
+      "per_ride_median": 55.9,
+      "p25": 47.1,
+      "p75": 60.0,
+      "per_ride_std": 10.5,
+      "num_samples": 17
+    },
+    {
+      "store": "T1EX-PUN-AUNDH",
+      "per_ride_avg": 71.1,
+      "per_ride_median": 71.1,
+      "p25": 71.1,
+      "p75": 71.1,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-BANER",
+      "per_ride_avg": 44.8,
+      "per_ride_median": 41.7,
+      "p25": 37.8,
+      "p75": 51.7,
+      "per_ride_std": 8.8,
+      "num_samples": 6
+    },
+    {
+      "store": "T1EX-PUN-BAVDHAN",
+      "per_ride_avg": 63.1,
+      "per_ride_median": 62.8,
+      "p25": 60.4,
+      "p75": 67.2,
+      "per_ride_std": 10.5,
+      "num_samples": 0
+    },
+    {
+      "store": "T1EX-PUN-BLUERIDGE",
+      "per_ride_avg": 63.6,
+      "per_ride_median": 63.1,
+      "p25": 57.5,
+      "p75": 69.5,
+      "per_ride_std": 7.9,
+      "num_samples": 5
+    },
+    {
+      "store": "T1EX-PUN-CHINCHWADGAON",
+      "per_ride_avg": 62.5,
+      "per_ride_median": 62.5,
+      "p25": 62.5,
+      "p75": 62.5,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-HINJEWADIPHASE3",
+      "per_ride_avg": 47.0,
+      "per_ride_median": 47.0,
+      "p25": 47.0,
+      "p75": 47.0,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-NIGDI",
+      "per_ride_avg": 69.1,
+      "per_ride_median": 69.1,
+      "p25": 69.1,
+      "p75": 69.1,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-PIMPLEGURAV",
+      "per_ride_avg": 69.5,
+      "per_ride_median": 69.5,
+      "p25": 69.5,
+      "p75": 69.5,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-PUNAWALE",
+      "per_ride_avg": 53.6,
+      "per_ride_median": 53.6,
+      "p25": 53.6,
+      "p75": 53.6,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-RAVET",
+      "per_ride_avg": 53.3,
+      "per_ride_median": 53.3,
+      "p25": 53.3,
+      "p75": 53.3,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-SHIVAJINAGAR",
+      "per_ride_avg": 68.1,
+      "per_ride_median": 68.1,
+      "p25": 68.1,
+      "p75": 68.1,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-SINHAGADROAD",
+      "per_ride_avg": 50.0,
+      "per_ride_median": 50.0,
+      "p25": 50.0,
+      "p75": 50.0,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-SUS",
+      "per_ride_avg": 81.3,
+      "per_ride_median": 99.6,
+      "p25": 71.4,
+      "p75": 100.4,
+      "per_ride_std": 33.1,
+      "num_samples": 3
+    },
+    {
+      "store": "T1EX-PUN-WADGAONSHERI",
+      "per_ride_avg": 70.1,
+      "per_ride_median": 70.1,
+      "p25": 70.1,
+      "p75": 70.1,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    },
+    {
+      "store": "T1EX-PUN-WANOWARI",
+      "per_ride_avg": 89.6,
+      "per_ride_median": 89.6,
+      "p25": 89.6,
+      "p75": 89.6,
+      "per_ride_std": 10.5,
+      "num_samples": 1
+    }
+  ]
+}
