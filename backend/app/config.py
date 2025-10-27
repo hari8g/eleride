@@ -42,6 +42,10 @@ class Settings(BaseSettings):
             return v
         parsed = urlparse(raw)
         host = (parsed.hostname or "").lower()
+        # normalize scheme to SQLAlchemy psycopg v3 driver
+        scheme = parsed.scheme
+        if scheme in ("postgres", "postgresql", ""):
+            scheme = "postgresql+psycopg"
         if host in {"localhost", "127.0.0.1"} or host.endswith(".internal"):
             return raw
         # keep if already present
@@ -51,7 +55,7 @@ class Settings(BaseSettings):
         q["sslmode"] = "require"
         new_query = urlencode(q)
         rebuilt = urlunparse((
-            parsed.scheme,
+            scheme,
             parsed.netloc,
             parsed.path,
             parsed.params,
