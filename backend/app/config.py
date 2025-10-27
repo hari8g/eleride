@@ -46,7 +46,8 @@ class Settings(BaseSettings):
         scheme = parsed.scheme
         if scheme in ("postgres", "postgresql", ""):
             scheme = "postgresql+psycopg"
-        if host in {"localhost", "127.0.0.1"} or host.endswith(".internal"):
+        # Treat common internal/docker hosts as non-SSL
+        if host in {"localhost", "127.0.0.1", "db"} or host.endswith(".internal") or "." not in host:
             return raw
         # keep if already present
         q = dict(parse_qsl(parsed.query, keep_blank_values=True))

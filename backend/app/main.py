@@ -16,18 +16,24 @@ from .routes import analytics_pack
 from .routes import hotspots as hotspots_routes
 from .routes import credit as credit_routes
 from .routes import mg as mg_routes
+from .routes import energy as energy_routes
+from .routes import maintenance as maint_routes
+from .routes import underwriting as uw_routes
+from .routes import cashflow as cf_routes
+from .routes import expansion as exp_routes
+from .routes import retention as ret_routes
 
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Eleride Platform Orchestration API", version="0.1.0")
 
     # CORS
-    # CORS: allow explicit origins or fallback to Vercel preview wildcard if regex not provided
+    # CORS: allow explicit origins (includes localhost by default); use regex only if provided
     allow_origins = [str(o) for o in settings.cors_origins]
-    allow_regex = settings.cors_origin_regex or r"^https://.+\.vercel\.app$"
+    allow_regex = settings.cors_origin_regex
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=allow_origins if not allow_regex else [],
+        allow_origins=allow_origins,
         allow_origin_regex=allow_regex,
         allow_credentials=True,
         allow_methods=["*"],
@@ -64,6 +70,12 @@ def create_app() -> FastAPI:
     app.include_router(hotspots_routes.router)
     app.include_router(credit_routes.router)
     app.include_router(mg_routes.router)
+    app.include_router(energy_routes.router)
+    app.include_router(maint_routes.router)
+    app.include_router(uw_routes.router)
+    app.include_router(cf_routes.router)
+    app.include_router(exp_routes.router)
+    app.include_router(ret_routes.router)
 
     # Avoid 307 redirects by serving both slash and no-slash at root
     @app.get("/")

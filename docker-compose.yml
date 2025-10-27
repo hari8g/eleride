@@ -19,7 +19,8 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .
+      dockerfile: backend/Dockerfile
     depends_on:
       db:
         condition: service_healthy
@@ -28,9 +29,9 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL:-postgresql+psycopg://ev:evpass@db:5432/evdb}
     volumes:
-      - ./backend:/app
+      - ./backend/app:/app/app
       - ./data:/data
-      - ./analytics:/app/analytics
+      - ./analytics:/analytics
       - ./artifacts:/artifacts
     ports:
       - "8000:8000"

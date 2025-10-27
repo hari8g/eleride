@@ -548,6 +548,269 @@ async function initMGTab() {
   if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
 }
 
+// Energy Demand tab
+async function fetchEnergy(city) {
+  const r = await fetch(`${API}/energy/demand?city=${encodeURIComponent(city)}`);
+  if (!r.ok) return {};
+  return r.json();
+}
+
+async function initEnergyTab() {
+  const all = await fetch(`${API}/energy/demand`);
+  if (!all.ok) return;
+  const cities = Object.keys(await all.json());
+  const sel = document.getElementById('city-select-energy');
+  sel.innerHTML = cities.map(c => `<option value="${c}">${c}</option>`).join('');
+  async function update(city) {
+    const obj = await fetchEnergy(city);
+    const rows = obj[city] || [];
+    const tbody = document.querySelector('#energy-table tbody');
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.store}</td>
+        <td>${r.orders_week ?? '—'}</td>
+        <td>${r.avg_dist_km_per_order ?? '—'}</td>
+        <td>${r.energy_kwh_week ?? '—'}</td>
+        <td>${r.est_swaps_week ?? '—'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // charts
+    const labels = rows.map(r => r.store);
+    const kwh = rows.map(r => Number(r.energy_kwh_week || 0));
+    const swaps = rows.map(r => Number(r.est_swaps_week || 0));
+    const ctxK = document.getElementById('energy-kwh-chart');
+    const ctxS = document.getElementById('energy-swaps-chart');
+    if (window._energyK) window._energyK.destroy();
+    if (window._energyS) window._energyS.destroy();
+    window._energyK = new Chart(ctxK, { type:'bar', data:{ labels, datasets:[{ label:'kWh/week', data:kwh, backgroundColor:'#06b6d4'}]}, options:{ indexAxis:'y', plugins:{legend:{display:false}}}});
+    window._energyS = new Chart(ctxS, { type:'bar', data:{ labels, datasets:[{ label:'Swaps/week', data:swaps, backgroundColor:'#f97316'}]}, options:{ indexAxis:'y', plugins:{legend:{display:false}}}});
+  }
+  sel.addEventListener('change', e => update(e.target.value));
+  if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
+}
+
+// Maintenance tab
+async function fetchMaint(city) {
+  const r = await fetch(`${API}/maintenance/risk?city=${encodeURIComponent(city)}`);
+  if (!r.ok) return {};
+  return r.json();
+}
+
+// Underwriting
+async function fetchUW(city) {
+  const r = await fetch(`${API}/underwriting/credit?city=${encodeURIComponent(city)}`);
+  if (!r.ok) return {};
+  return r.json();
+}
+
+async function initUWTab() {
+  const all = await fetch(`${API}/underwriting/credit`);
+  if (!all.ok) return;
+  const cities = Object.keys(await all.json());
+  const sel = document.getElementById('city-select-uw');
+  sel.innerHTML = cities.map(c => `<option value="${c}">${c}</option>`).join('');
+  async function update(city) {
+    const obj = await fetchUW(city);
+    const rows = obj[city] || [];
+    const tbody = document.querySelector('#uw-table tbody');
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.cee_name || r.cee_id}</td>
+        <td>${r.store || '—'}</td>
+        <td>${r.credit_score ?? '—'}</td>
+        <td>₹${Number(r.monthly_median_inr || 0).toLocaleString('en-IN')}</td>
+        <td>₹${Number(r.recommended_limit_inr || 0).toLocaleString('en-IN')}</td>
+        <td>${(Number(r.pd || 0)*100).toFixed(1)}%</td>
+        <td>${(Number(r.lgd || 0)*100).toFixed(0)}%</td>
+        <td>₹${Number(r.ead || 0).toLocaleString('en-IN')}</td>
+        <td>₹${Number(r.expected_loss_inr || 0).toLocaleString('en-IN')}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    const labels = rows.slice(0,15).map(r => r.cee_name || r.cee_id);
+    const el = rows.slice(0,15).map(r => Number(r.expected_loss_inr || 0));
+    const ctx = document.getElementById('uw-el-chart');
+    if (window._uw) window._uw.destroy();
+    window._uw = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'Expected Loss (₹)', data:el, backgroundColor:'#f59e0b'}]}, options:{ indexAxis:'y', plugins:{legend:{display:false}}}});
+  }
+  sel.addEventListener('change', e => update(e.target.value));
+  if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
+}
+
+// Cashflow
+async function fetchCF(city) {
+  const r = await fetch(`${API}/cashflow/forecast?city=${encodeURIComponent(city)}`);
+  if (!r.ok) return {};
+  return r.json();
+}
+
+async function initCFTab() {
+  const all = await fetch(`${API}/cashflow/forecast`);
+  if (!all.ok) return;
+  const cities = Object.keys(await all.json());
+  const sel = document.getElementById('city-select-cf');
+  const selStore = document.getElementById('store-select-cf');
+  sel.innerHTML = cities.map(c => `<option value="${c}">${c}</option>`).join('');
+  async function update(city) {
+    const obj = await fetchCF(city);
+    const rows = obj[city] || {};
+    const stores = Object.keys(rows);
+    const tbody = document.querySelector('#cf-table tbody');
+    tbody.innerHTML = '';
+    stores.forEach(s => {
+      const it = rows[s];
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${s}</td>
+        <td>₹${it.past.map(x => Number(x).toLocaleString('en-IN')).join(', ')}</td>
+        <td>₹${it.forecast.map(x => Number(x).toLocaleString('en-IN')).join(', ')}</td>
+        <td>${it.rationale || '—'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    // populate store selector and draw selected store
+    selStore.innerHTML = stores.map(s => `<option value="${s}">${s}</option>`).join('');
+    const selected = selStore.value || stores[0];
+    if (selected) {
+      const it = rows[selected];
+      const labels = ['-3w','-2w','-1w','0','+1w','+2w','+3w','+4w'];
+      const data = [...it.past, ...it.forecast];
+      const ctx = document.getElementById('cf-chart');
+      if (window._cf) window._cf.destroy();
+      window._cf = new Chart(ctx, { type:'line', data:{ labels, datasets:[{ label:selected, data, borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,.15)', tension:.2, fill:true }] }, options:{ plugins:{legend:{display:true}}}});
+    }
+  }
+  sel.addEventListener('change', e => update(e.target.value));
+  selStore.addEventListener('change', async e => {
+    const city = sel.value;
+    const obj = await fetchCF(city);
+    const rows = obj[city] || {};
+    const selected = e.target.value;
+    if (rows[selected]) {
+      const it = rows[selected];
+      const labels = ['-3w','-2w','-1w','0','+1w','+2w','+3w','+4w'];
+      const data = [...it.past, ...it.forecast];
+      const ctx = document.getElementById('cf-chart');
+      if (window._cf) window._cf.destroy();
+      window._cf = new Chart(ctx, { type:'line', data:{ labels, datasets:[{ label:selected, data, borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,.15)', tension:.2, fill:true }] }, options:{ plugins:{legend:{display:true}}}});
+    }
+  });
+  if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
+}
+
+// Expansion
+async function fetchEXP(city) {
+  const r = await fetch(`${API}/expansion/opps?city=${encodeURIComponent(city)}`);
+  if (!r.ok) return {};
+  return r.json();
+}
+
+async function initEXPTab() {
+  const all = await fetch(`${API}/expansion/opps`);
+  if (!all.ok) return;
+  const cities = Object.keys(await all.json());
+  const sel = document.getElementById('city-select-exp');
+  sel.innerHTML = cities.map(c => `<option value="${c}">${c}</option>`).join('');
+  async function update(city) {
+    const obj = await fetchEXP(city);
+    const rows = obj[city] || [];
+    const tbody = document.querySelector('#exp-table tbody');
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.store}</td>
+        <td>${r.roi_score}</td>
+        <td>${r.capacity_gap ?? '—'}</td>
+        <td>${r.demand_score ?? '—'}</td>
+        <td>₹${Number(r.expected_gmv_week || 0).toLocaleString('en-IN')}</td>
+        <td>${r.rationale || '—'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    const labels = rows.slice(0,15).map(r => r.store);
+    const roi = rows.slice(0,15).map(r => r.roi_score);
+    const ctx = document.getElementById('exp-chart');
+    if (window._exp) window._exp.destroy();
+    window._exp = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'ROI score', data:roi, backgroundColor:'#10b981'}]}, options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{beginAtZero:true, max:100}}}});
+  }
+  sel.addEventListener('change', e => update(e.target.value));
+  if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
+}
+
+// Retention
+async function fetchRET(city) {
+  const r = await fetch(`${API}/retention/at-risk?city=${encodeURIComponent(city)}`);
+  if (!r.ok) return {};
+  return r.json();
+}
+
+async function initRETTab() {
+  const all = await fetch(`${API}/retention/at-risk`);
+  if (!all.ok) return;
+  const cities = Object.keys(await all.json());
+  const sel = document.getElementById('city-select-ret');
+  sel.innerHTML = cities.map(c => `<option value="${c}">${c}</option>`).join('');
+  async function update(city) {
+    const obj = await fetchRET(city);
+    const rows = obj[city] || [];
+    const tbody = document.querySelector('#ret-table tbody');
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.store}</td>
+        <td>${r.risk}</td>
+        <td>${r.actions}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    const labels = rows.slice(0,15).map(r => r.store);
+    const risk = rows.slice(0,15).map(r => r.risk);
+    const ctx = document.getElementById('ret-chart');
+    if (window._ret) window._ret.destroy();
+    window._ret = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'Churn risk (%)', data:risk, backgroundColor:'#ef4444'}]}, options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{beginAtZero:true, max:100}}}});
+  }
+  sel.addEventListener('change', e => update(e.target.value));
+  if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
+}
+async function initMaintTab() {
+  const all = await fetch(`${API}/maintenance/risk`);
+  if (!all.ok) return;
+  const cities = Object.keys(await all.json());
+  const sel = document.getElementById('city-select-maint');
+  sel.innerHTML = cities.map(c => `<option value="${c}">${c}</option>`).join('');
+  async function update(city) {
+    const obj = await fetchMaint(city);
+    const rows = obj[city] || [];
+    const tbody = document.querySelector('#maint-table tbody');
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.store}</td>
+        <td>${r.downtime_risk ?? '—'}</td>
+        <td>${r.est_tickets_week ?? '—'}</td>
+        <td>${r.notes || '—'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    const labels = rows.map(r => r.store);
+    const risk = rows.map(r => Number(r.downtime_risk || 0));
+    const ctx = document.getElementById('maint-risk-chart');
+    if (window._maint) window._maint.destroy();
+    window._maint = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'Downtime risk (%)', data:risk, backgroundColor:'#ef4444'}]}, options:{ indexAxis:'y', scales:{x:{beginAtZero:true, max:100}}, plugins:{legend:{display:false}}}});
+  }
+  sel.addEventListener('change', e => update(e.target.value));
+  if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
+}
+
 function renderRideStats(row) {
   const wrap = document.getElementById('ride-stats');
   wrap.innerHTML = '';
@@ -643,6 +906,12 @@ async function main() {
   const btnHot = document.getElementById('tab-btn-hotspots');
   const btnCredit = document.getElementById('tab-btn-credit');
   const btnMG = document.getElementById('tab-btn-mg');
+  const btnEnergy = document.getElementById('tab-btn-energy');
+  const btnMaint = document.getElementById('tab-btn-maint');
+  const btnUW = document.getElementById('tab-btn-uw');
+  const btnCF = document.getElementById('tab-btn-cf');
+  const btnEXP = document.getElementById('tab-btn-exp');
+  const btnRET = document.getElementById('tab-btn-ret');
   const tabDemand = document.getElementById('tab-demand');
   const tab3pl = document.getElementById('tab-threepl');
   const tabRide = document.getElementById('tab-ride');
@@ -651,6 +920,12 @@ async function main() {
   const tabHot = document.getElementById('tab-hotspots');
   const tabCredit = document.getElementById('tab-credit');
   const tabMG = document.getElementById('tab-mg');
+  const tabEnergy = document.getElementById('tab-energy');
+  const tabMaint = document.getElementById('tab-maint');
+  const tabUW = document.getElementById('tab-uw');
+  const tabCF = document.getElementById('tab-cf');
+  const tabEXP = document.getElementById('tab-exp');
+  const tabRET = document.getElementById('tab-ret');
   function activate(tab) {
     const activeStyle = 'background:#f9fafb;';
     const inactiveStyle = 'background:#fff;';
@@ -686,6 +961,24 @@ async function main() {
       tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'block';
       btnMG.setAttribute('style', btnMG.getAttribute('style').replace('background:#fff;', activeStyle));
       btnDemand.setAttribute('style', btnDemand.getAttribute('style').replace('background:#f9fafb;', inactiveStyle)); btn3pl.setAttribute('style', btn3pl.getAttribute('style').replace('background:#f9fafb;', inactiveStyle)); btnRide.setAttribute('style', btnRide.getAttribute('style').replace('background:#f9fafb;', inactiveStyle)); btnInc.setAttribute('style', btnInc.getAttribute('style').replace('background:#f9fafb;', inactiveStyle)); btnPay.setAttribute('style', btnPay.getAttribute('style').replace('background:#f9fafb;', inactiveStyle)); btnHot.setAttribute('style', btnHot.getAttribute('style').replace('background:#f9fafb;', inactiveStyle)); btnCredit.setAttribute('style', btnCredit.getAttribute('style').replace('background:#f9fafb;', inactiveStyle));
+    } else if (tab === 'energy') {
+      tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'none'; tabEnergy.style.display = 'block'; tabMaint.style.display = 'none';
+      btnEnergy.setAttribute('style', btnEnergy.getAttribute('style').replace('background:#fff;', activeStyle));
+    } else if (tab === 'maint') {
+      tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'none'; tabEnergy.style.display = 'none'; tabMaint.style.display = 'block';
+      btnMaint.setAttribute('style', btnMaint.getAttribute('style').replace('background:#fff;', activeStyle));
+    } else if (tab === 'uw') {
+      tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'none'; tabEnergy.style.display = 'none'; tabMaint.style.display = 'none'; tabUW.style.display = 'block';
+      btnUW.setAttribute('style', btnUW.getAttribute('style').replace('background:#fff;', activeStyle));
+    } else if (tab === 'cf') {
+      tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'none'; tabEnergy.style.display = 'none'; tabMaint.style.display = 'none'; tabUW.style.display = 'none'; tabCF.style.display = 'block';
+      btnCF.setAttribute('style', btnCF.getAttribute('style').replace('background:#fff;', activeStyle));
+    } else if (tab === 'exp') {
+      tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'none'; tabEnergy.style.display = 'none'; tabMaint.style.display = 'none'; tabUW.style.display = 'none'; tabCF.style.display = 'none'; tabEXP.style.display = 'block';
+      btnEXP.setAttribute('style', btnEXP.getAttribute('style').replace('background:#fff;', activeStyle));
+    } else if (tab === 'ret') {
+      tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'none'; tabEnergy.style.display = 'none'; tabMaint.style.display = 'none'; tabUW.style.display = 'none'; tabCF.style.display = 'none'; tabEXP.style.display = 'none'; tabRET.style.display = 'block';
+      btnRET.setAttribute('style', btnRET.getAttribute('style').replace('background:#fff;', activeStyle));
     }
   }
   btnDemand.addEventListener('click', async () => { activate('demand'); await initDemandTab(); });
@@ -696,6 +989,12 @@ async function main() {
   btnHot.addEventListener('click', async () => { activate('hotspots'); await initHotspotsTab(); });
   btnCredit.addEventListener('click', async () => { activate('credit'); await initCreditTab(); });
   btnMG.addEventListener('click', async () => { activate('mg'); await initMGTab(); });
+  btnEnergy.addEventListener('click', async () => { activate('energy'); await initEnergyTab(); });
+  btnMaint.addEventListener('click', async () => { activate('maint'); await initMaintTab(); });
+  btnUW.addEventListener('click', async () => { activate('uw'); await initUWTab(); });
+  btnCF.addEventListener('click', async () => { activate('cf'); await initCFTab(); });
+  btnEXP.addEventListener('click', async () => { activate('exp'); await initEXPTab(); });
+  btnRET.addEventListener('click', async () => { activate('ret'); await initRETTab(); });
 
   // default view
   await initDemandTab();

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eleride Platform Orchestration</title>
+    <title>Eleride-Bosch EV fleet orchestrator</title>
     <style>
       table{width:100%;border-collapse:collapse}
       #demand-table{table-layout:fixed}
@@ -20,7 +20,7 @@
   </head>
   <body>
     <div style="max-width: 1100px; margin: 24px auto; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;">
-      <h1 style="margin-bottom: 8px;">EV Orchestrator</h1>
+      <h1 style="margin-bottom: 8px;">Eleride-Bosch EV fleet orchestrator</h1>
       <div id="status" style="margin-bottom: 16px;">Checking backend...</div>
 
       <nav style="display:flex; gap:8px; margin-bottom: 12px;">
@@ -32,6 +32,12 @@
         <button id="tab-btn-hotspots" data-tab="hotspots" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Hotspots</button>
         <button id="tab-btn-credit" data-tab="credit" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Credit Profiles</button>
         <button id="tab-btn-mg" data-tab="mg" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">MG Guidance</button>
+        <button id="tab-btn-energy" data-tab="energy" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Energy Demand</button>
+        <button id="tab-btn-maint" data-tab="maint" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Maintenance</button>
+        <button id="tab-btn-uw" data-tab="uw" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Credit Underwriting</button>
+        <button id="tab-btn-cf" data-tab="cf" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Cashflow</button>
+        <button id="tab-btn-exp" data-tab="exp" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Expansion</button>
+        <button id="tab-btn-ret" data-tab="ret" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Retention</button>
       </nav>
 
       
@@ -278,6 +284,188 @@
             </thead>
             <tbody></tbody>
           </table>
+        </section>
+      </section>
+
+      <section id="tab-energy" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-energy"><strong>City:</strong></label>
+          <select id="city-select-energy" style="padding:6px 8px;"></select>
+          <div style="margin-left:auto; opacity:.7;">kWh/week and swaps (est.)</div>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Energy Demand by Store</h2>
+            <table id="energy-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>Orders/week</th>
+                  <th>Avg km/order</th>
+                  <th>Energy (kWh/week)</th>
+                  <th>Swaps/week</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+              <h2 style="margin:0 0 8px 0; font-size:18px;">Weekly Energy (kWh)</h2>
+              <canvas id="energy-kwh-chart" height="220"></canvas>
+            </div>
+            <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+              <h2 style="margin:0 0 8px 0; font-size:18px;">Estimated Swaps/Week</h2>
+              <canvas id="energy-swaps-chart" height="220"></canvas>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-maint" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-maint"><strong>City:</strong></label>
+          <select id="city-select-maint" style="padding:6px 8px;"></select>
+          <div style="margin-left:auto; opacity:.7;">Downtime risk & tickets (est.)</div>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Maintenance Risk by Store</h2>
+            <table id="maint-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>Downtime risk (%)</th>
+                  <th>Tickets/week</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Downtime Risk (%)</h2>
+            <canvas id="maint-risk-chart" height="240"></canvas>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-uw" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-uw"><strong>City:</strong></label>
+          <select id="city-select-uw" style="padding:6px 8px;"></select>
+          <div style="margin-left:auto; opacity:.7;">PD/LGD/EAD and Expected Loss</div>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Underwriting Table</h2>
+            <table id="uw-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Driver</th>
+                  <th>Store</th>
+                  <th>Score</th>
+                  <th>Monthly Median</th>
+                  <th>Limit</th>
+                  <th>PD</th>
+                  <th>LGD</th>
+                  <th>EAD</th>
+                  <th>EL</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Expected Loss by Driver</h2>
+            <canvas id="uw-el-chart" height="280"></canvas>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-cf" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-cf"><strong>City:</strong></label>
+          <select id="city-select-cf" style="padding:6px 8px;"></select>
+          <label for="store-select-cf" style="margin-left:16px;"><strong>Store:</strong></label>
+          <select id="store-select-cf" style="padding:6px 8px; min-width:220px;"></select>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Cashflow Forecast (per store)</h2>
+            <canvas id="cf-chart" height="320"></canvas>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Details</h2>
+            <table id="cf-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>Past (4w)</th>
+                  <th>Forecast (4w)</th>
+                  <th>Method</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-exp" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-exp"><strong>City:</strong></label>
+          <select id="city-select-exp" style="padding:6px 8px;"></select>
+          <div style="margin-left:auto; opacity:.7;">ROI from demand and capacity gaps</div>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Expansion ROI (Top)</h2>
+            <canvas id="exp-chart" height="280"></canvas>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Ranked Opportunities</h2>
+            <table id="exp-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>ROI score</th>
+                  <th>Gap (riders/day)</th>
+                  <th>Demand</th>
+                  <th>Expected GMV/wk</th>
+                  <th>Why</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-ret" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="city-select-ret"><strong>City:</strong></label>
+          <select id="city-select-ret" style="padding:6px 8px;"></select>
+          <div style="margin-left:auto; opacity:.7;">At-risk riders & actions</div>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Churn Risk by Store</h2>
+            <canvas id="ret-chart" height="280"></canvas>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Playbook</h2>
+            <table id="ret-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                  <th>Store</th>
+                  <th>Risk %</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </section>
       </section>
     </div>
