@@ -413,15 +413,73 @@ async function initHotspotsTab() {
     document.head.appendChild(link);
     await new Promise(res => { const s = document.createElement('script'); s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'; s.onload = res; document.body.appendChild(s); });
   }
+  // Import h3-js via ESM dynamically to avoid MIME issues
+  let h3;
+  try {
+    h3 = (await import('https://cdn.skypack.dev/h3-js@4.1.0')).default;
+  } catch (e) {
+    console.warn('Failed to import h3-js via ESM, falling back to markers', e);
+    h3 = null;
+  }
   const mapEl = document.getElementById('map');
   mapEl.innerHTML = '';
-  const map = L.map('map').setView([18.5204, 73.8567], 11); // default Pune
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+  let map;
+  try {
+    map = L.map('map').setView([18.5204, 73.8567], 11); // default Pune
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+    // ensure proper sizing when tab becomes visible
+    setTimeout(() => map.invalidateSize(), 0);
+    setTimeout(() => map.invalidateSize(), 300);
+  } catch (e) {
+    console.error('Leaflet init error', e);
+    return;
+  }
   const data = await fetchHotspots();
-  data.features.forEach(f => {
-    const radius = Math.max(5, Math.min(25, f.count));
-    L.circleMarker([f.lat, f.lng], { radius, color:'#ef4444', fillColor:'#ef4444', fillOpacity:0.4 }).addTo(map).bindPopup(`Zone ${f.zone_id}<br/>Jobs: ${f.count}`);
-  });
+  if (h3) {
+    const res = 7; // H3 resolution (lower->bigger hexes)
+    const hexToCount = new Map();
+    let maxCount = 0;
+    (data.features || []).forEach(f => {
+      const cell = h3.latLngToCell(f.lat, f.lng, res);
+      const c = (hexToCount.get(cell) || 0) + (Number(f.count) || 1);
+      hexToCount.set(cell, c);
+      if (c > maxCount) maxCount = c;
+    });
+
+  function colorFor(v, vmax) {
+    const t = Math.max(0, Math.min(1, vmax ? v / vmax : 0));
+    // interpolate yellow (#fde047) -> red (#ef4444)
+    const r1=253,g1=224,b1=71, r2=239,g2=68,b2=68;
+    const r = Math.round(r1 + (r2-r1)*t), g = Math.round(g1 + (g2-g1)*t), b = Math.round(b1 + (b2-b1)*t);
+    return `rgb(${r},${g},${b})`;
+  }
+
+    const polygons = [];
+    hexToCount.forEach((cnt, cell) => {
+      const boundary = h3.cellToBoundary(cell, true).map(([lat,lng]) => [lat, lng]);
+      const col = colorFor(cnt, maxCount);
+      const poly = L.polygon(boundary, { color: col, fillColor: col, weight: 1, fillOpacity: 0.5 })
+        .bindPopup(`Jobs: ${cnt}`)
+        .addTo(map);
+      polygons.push(poly);
+    });
+    if (polygons.length) {
+      const group = L.featureGroup(polygons);
+      try { map.fitBounds(group.getBounds().pad(0.1)); } catch {}
+      return;
+    }
+  }
+  // fallback markers or message
+  if ((data.features || []).length) {
+    (data.features || []).forEach(f => {
+      const radius = Math.max(4, Math.min(18, f.count || 1));
+      L.circleMarker([f.lat, f.lng], { radius, color:'#ef4444', fillColor:'#ef4444', fillOpacity:0.35 }).addTo(map);
+    });
+  } else {
+    const note = L.control({position:'topright'});
+    note.onAdd = function() { const d = L.DomUtil.create('div'); d.style.background='#fff'; d.style.padding='6px 8px'; d.style.border='1px solid #e5e7eb'; d.style.borderRadius='6px'; d.textContent='No hotspot data available'; return d; };
+    note.addTo(map);
+  }
 }
 
 // Credit Profiles

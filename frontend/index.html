@@ -17,6 +17,8 @@
       .bar-fill{background:#10b981;height:100%}
       .table-sm td{border-bottom:1px solid #f3f4f6}
     </style>
+    <!-- Preload Leaflet CSS to ensure map renders even if JS loads late -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body>
     <div style="max-width: 1100px; margin: 24px auto; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;">
@@ -470,6 +472,8 @@
       </section>
     </div>
 
+    <!-- Ensure Leaflet is available globally before our module initializes the map -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script type="module" src="/src/main.js"></script>
   </body>
   </html>
