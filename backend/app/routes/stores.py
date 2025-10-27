@@ -49,6 +49,11 @@ def list_stores():
             stores.append(Store(id=s, name=s))
     return stores
 
+# Non-trailing-slash to avoid 307
+@router.get("", response_model=List[Store])
+def list_stores_noslash():
+    return list_stores()
+
 
 @router.get("/{store}/summary", response_model=StoreSummary)
 def store_summary(store: str):

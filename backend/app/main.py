@@ -62,6 +62,11 @@ def create_app() -> FastAPI:
     app.include_router(credit_routes.router)
     app.include_router(mg_routes.router)
 
+    # Avoid 307 redirects by serving both slash and no-slash at root
+    @app.get("/")
+    def root():
+        return {"ok": True, "docs": "/docs"}
+
     return app
 
 

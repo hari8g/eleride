@@ -13,9 +13,21 @@ router = APIRouter(prefix="/jobs", tags=["jobs"])
 def list_jobs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.list_jobs(db, skip=skip, limit=limit)
 
+# Serve non-trailing-slash variant to avoid 307
+@router.get("", response_model=list[schemas.Job])
+def list_jobs_noslash(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.list_jobs(db, skip=skip, limit=limit)
+
 
 @router.post("/", response_model=schemas.Job, status_code=201)
 def create_job(job_in: schemas.JobCreate, db: Session = Depends(get_db)):
+    existing = crud.get_job_by_external_id(db, job_in.external_job_id)
+    if existing:
+        raise HTTPException(status_code=409, detail="Job with external_job_id already exists")
+    return crud.create_job(db, job_in)
+
+@router.post("", response_model=schemas.Job, status_code=201)
+def create_job_noslash(job_in: schemas.JobCreate, db: Session = Depends(get_db)):
     existing = crud.get_job_by_external_id(db, job_in.external_job_id)
     if existing:
         raise HTTPException(status_code=409, detail="Job with external_job_id already exists")
