@@ -24,18 +24,27 @@ def create_app() -> FastAPI:
     # CORS
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[str(o) for o in settings.cors_origins],
+        allow_origins=[str(o) for o in settings.cors_origins] if not settings.cors_origin_regex else [],
+        allow_origin_regex=settings.cors_origin_regex,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
 
-    # Create tables (simple startup init; alembic recommended for prod)
-    Base.metadata.create_all(bind=engine)
+    # Create tables (best-effort; avoid crash if DB temporarily unreachable)
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception:
+        pass
 
     @app.get("/healthz")
     def healthz():
-        return {"status": "ok"}
+        try:
+            with engine.connect() as conn:
+                conn.exec_driver_sql("SELECT 1")
+            return {"status": "ok"}
+        except Exception as e:
+            return {"status": "db_error", "detail": str(e)}
     
     # Routers
     app.include_router(jobs_routes.router)
