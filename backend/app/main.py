@@ -22,10 +22,13 @@ def create_app() -> FastAPI:
     app = FastAPI(title="Eleride Platform Orchestration API", version="0.1.0")
 
     # CORS
+    # CORS: allow explicit origins or fallback to Vercel preview wildcard if regex not provided
+    allow_origins = [str(o) for o in settings.cors_origins]
+    allow_regex = settings.cors_origin_regex or r"^https://.+\.vercel\.app$"
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[str(o) for o in settings.cors_origins] if not settings.cors_origin_regex else [],
-        allow_origin_regex=settings.cors_origin_regex,
+        allow_origins=allow_origins if not allow_regex else [],
+        allow_origin_regex=allow_regex,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
