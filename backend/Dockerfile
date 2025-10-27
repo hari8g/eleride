@@ -16,6 +16,11 @@ RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
 COPY app /app/app
 
+# Include precomputed analytics artifacts and data so endpoints work on Render
+COPY ../analytics /analytics
+COPY ../artifacts /artifacts
+COPY ../data /data
+
 EXPOSE 8000
 
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
