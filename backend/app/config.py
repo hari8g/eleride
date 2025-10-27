@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import AnyHttpUrl
 from typing import List, Optional
 from pydantic import field_validator
+from urllib.parse import urlparse, urlencode, urlunparse, parse_qsl
 
 
 class Settings(BaseSettings):
@@ -36,16 +37,28 @@ class Settings(BaseSettings):
     @classmethod
     def ensure_ssl(cls, v: str) -> str:
         try:
-            url = str(v)
+            raw = str(v)
         except Exception:
             return v
-        lower = url.lower()
-        if "localhost" in lower or "127.0.0.1" in lower:
-            return url
-        if "sslmode=" not in lower:
-            sep = "&" if "?" in url else "?"
-            return f"{url}{sep}sslmode=require"
-        return url
+        parsed = urlparse(raw)
+        host = (parsed.hostname or "").lower()
+        if host in {"localhost", "127.0.0.1"} or host.endswith(".internal"):
+            return raw
+        # keep if already present
+        q = dict(parse_qsl(parsed.query, keep_blank_values=True))
+        if any(k.lower() == "sslmode" for k in q.keys()):
+            return raw
+        q["sslmode"] = "require"
+        new_query = urlencode(q)
+        rebuilt = urlunparse((
+            parsed.scheme,
+            parsed.netloc,
+            parsed.path,
+            parsed.params,
+            new_query,
+            parsed.fragment,
+        ))
+        return rebuilt
 
 
 settings = Settings()
