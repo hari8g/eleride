@@ -11,15 +11,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt /app/requirements.txt
+COPY backend/requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
-COPY app /app/app
+# Copy backend application code
+COPY backend/app /app/app
 
-# Include precomputed analytics artifacts and data so endpoints work on Render
-COPY ../analytics /analytics
-COPY ../artifacts /artifacts
-COPY ../data /data
+# Include precomputed analytics artifacts and data (requires repo root build context)
+COPY analytics /analytics
+COPY artifacts /artifacts
+COPY data /data
 
 EXPOSE 8000
 
