@@ -542,12 +542,11 @@ async function initCreditTab() {
           borderColor: borders,
           borderWidth: 1,
           borderRadius: 8,
-          barThickness: 18,
+          barThickness: 22,
         }]
       },
       options: {
         indexAxis: 'y',
-        layout: { padding: 0 },
         plugins: {
           legend: { display: false },
           title: { display: true, text: 'Credit Bands Distribution', color: '#111827', font: { size: 14, weight: '600' } },
@@ -558,10 +557,10 @@ async function initCreditTab() {
           }
         },
         scales: {
-          x: { beginAtZero: true, offset: false, grid: { color: '#e5e7eb', borderDash: [4,4] }, ticks: { precision:0, padding: 0 } },
-          y: { offset: false, grid: { display: false }, ticks: { padding: 0 } }
+          x: { beginAtZero: true, grid: { color: '#e5e7eb', borderDash: [4,4] }, ticks: { precision:0 } },
+          y: { grid: { display: false } }
         },
-        animation: { duration: 400, easing: 'easeOutQuart' }
+        animation: { duration: 500, easing: 'easeOutQuart' }
       }
     });
   }
@@ -800,12 +799,12 @@ async function initUWTab() {
     const el = rows.slice(0,15).map(r => Number(r.expected_loss_inr || 0));
     const ctx = document.getElementById('uw-el-chart');
     if (window._uw) window._uw.destroy();
-    window._uw = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'Expected Loss (₹)', data:el, backgroundColor:'#f59e0b', barThickness:18}]}, options:{ indexAxis:'y', layout:{ padding:0 }, plugins:{legend:{display:true}}, scales:{ x:{ beginAtZero:true, offset:false, ticks:{ padding:0 }, grid:{ color:'#e5e7eb', borderDash:[4,4]} }, y:{ offset:false, grid:{ display:false }, ticks:{ padding:0 } } } }});
+    window._uw = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'Expected Loss (₹)', data:el, backgroundColor:'#f59e0b'}]}, options:{ indexAxis:'y', plugins:{legend:{display:true}}}});
 
     const pdVals = rows.slice(0,15).map(r => Number(r.pd || 0) * 100);
     const ctxpd = document.getElementById('uw-pd-chart');
     if (window._uwpd) window._uwpd.destroy();
-    window._uwpd = new Chart(ctxpd, { type:'bar', data:{ labels, datasets:[{ label:'PD (%)', data:pdVals, backgroundColor:'#3b82f6', barThickness:18}]}, options:{ indexAxis:'y', layout:{ padding:0 }, plugins:{legend:{display:true}}, scales:{ x:{ beginAtZero:true, max:25, offset:false, ticks:{ padding:0 }, grid:{ color:'#e5e7eb', borderDash:[4,4]} }, y:{ offset:false, grid:{ display:false }, ticks:{ padding:0 } } } }});
+    window._uwpd = new Chart(ctxpd, { type:'bar', data:{ labels, datasets:[{ label:'PD (%)', data:pdVals, backgroundColor:'#3b82f6'}]}, options:{ indexAxis:'y', plugins:{legend:{display:true}}, scales:{x:{beginAtZero:true, max:25}}}});
   }
   sel.addEventListener('change', e => update(e.target.value));
   if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
