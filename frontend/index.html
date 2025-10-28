@@ -5,10 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eleride-Bosch EV fleet orchestrator</title>
     <style>
-      table{width:100%;border-collapse:collapse}
+      :root{--card-border:#e5e7eb;--muted:#6b7280;--thead:#f9fafb;--row:#ffffff;--row-alt:#fbfbfb}
+      table{width:100%;border-collapse:separate;border-spacing:0}
+      .u-table{font-size:14px;border:1px solid var(--card-border);border-radius:8px;overflow:hidden}
+      .u-table thead th{position:sticky;top:0;background:var(--thead);border-bottom:1px solid var(--card-border);z-index:1}
+      .u-table th,.u-table td{padding:10px 12px;text-align:left;vertical-align:middle;border-bottom:1px solid #f3f4f6}
+      .u-table tbody tr:nth-child(odd){background:var(--row)}
+      .u-table tbody tr:nth-child(even){background:var(--row-alt)}
+      .u-table tbody tr:hover{background:#f6f7f9}
+      .u-table td.num{text-align:right;font-variant-numeric:tabular-nums}
+      .u-table th small{color:var(--muted);font-weight:400}
+      /* Light, clean header color variants */
+      .u-head-green thead th{background:#ecfdf5;color:#065f46}
+      .u-head-amber thead th{background:#fffbeb;color:#92400e}
+      .u-head-indigo thead th{background:#eef2ff;color:#3730a3}
+      .u-head-purple thead th{background:#f5f3ff;color:#6d28d9}
+      .u-head-cyan thead th{background:#ecfeff;color:#155e75}
+      .u-head-blue thead th{background:#eff6ff;color:#1e40af}
+      .u-head-rose thead th{background:#fff1f2;color:#9f1239}
+      .u-head-lime thead th{background:#f7fee7;color:#3f6212}
+      .u-head-slate thead th{background:#f8fafc;color:#0f172a}
       #demand-table{table-layout:fixed}
-      #demand-table thead th{position:sticky;top:0;background:#f9fafb;border-bottom:1px solid #e5e7eb;z-index:1}
-      #demand-table th,#demand-table td{padding:8px;text-align:left;vertical-align:middle}
       .badge{display:inline-block;padding:2px 8px;border-radius:9999px;border:1px solid #e5e7eb;background:#f9fafb;font-size:12px}
       .chip{display:inline-block;padding:2px 8px;border-radius:6px;background:#eef2ff;border:1px solid #c7d2fe;font-size:12px}
       .dot{display:inline-block;width:10px;height:10px;border-radius:9999px;margin-right:6px}
@@ -40,6 +57,8 @@
         <button id="tab-btn-cf" data-tab="cf" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Cashflow</button>
         <button id="tab-btn-exp" data-tab="exp" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Expansion</button>
         <button id="tab-btn-ret" data-tab="ret" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Retention</button>
+        <button id="tab-btn-beckn" data-tab="beckn" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Beckn (Admin)</button>
+        <button id="tab-btn-launch" data-tab="launch" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Launch Planner</button>
       </nav>
 
       
@@ -60,7 +79,7 @@
           </div>
           <div style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; overflow:auto; max-height: 420px;">
             <h2 style="margin: 0 0 8px 0; font-size: 18px;">Store Details</h2>
-            <table id="demand-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="demand-table" class="u-table u-head-green" border="0" cellpadding="0" cellspacing="0">
               <colgroup>
                 <col style="width:35%">
                 <col style="width:25%">
@@ -111,7 +130,7 @@
           </div>
           <div style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; overflow:auto; max-height: 480px;">
             <h2 style="margin: 0 0 8px 0; font-size: 18px;">3PL Planning Table</h2>
-            <table id="threepl-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="threepl-table" class="u-table u-head-amber" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Store</th>
@@ -148,7 +167,7 @@
           </div>
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">All stores (city)</h2>
-            <table id="ride-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="ride-table" class="u-table u-head-indigo" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Store</th>
@@ -178,7 +197,7 @@
           </div>
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Incentives Table</h2>
-            <table id="inc-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="inc-table" class="u-table u-head-purple" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Store</th>
@@ -207,7 +226,7 @@
           </div>
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Payouts Table</h2>
-            <table id="pay-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="pay-table" class="u-table u-head-blue" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Store</th>
@@ -245,7 +264,7 @@
           </div>
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:480px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Driver Credit Profiles</h2>
-            <table id="credit-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="credit-table" class="u-table u-head-slate" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Driver</th>
@@ -270,7 +289,7 @@
         </section>
         <section style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:480px;">
           <h2 style="margin:0 0 8px 0; font-size:18px;">Guidance to reach MG (per day)</h2>
-          <table id="mg-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+          <table id="mg-table" class="u-table u-head-indigo" border="0" cellpadding="0" cellspacing="0">
             <thead>
               <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                 <th>Driver</th>
@@ -298,7 +317,7 @@
         <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Energy Demand by Store</h2>
-            <table id="energy-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="energy-table" class="u-table u-head-cyan" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Store</th>
@@ -333,7 +352,7 @@
         <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Maintenance Risk by Store</h2>
-            <table id="maint-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="maint-table" class="u-table u-head-rose" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Store</th>
@@ -358,10 +377,10 @@
           <select id="city-select-uw" style="padding:6px 8px;"></select>
           <div style="margin-left:auto; opacity:.7;">PD/LGD/EAD and Expected Loss</div>
         </section>
-        <section style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Underwriting Table</h2>
-            <table id="uw-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="uw-table" class="u-table u-head-blue" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Driver</th>
@@ -377,10 +396,26 @@
               </thead>
               <tbody></tbody>
             </table>
+            <div style="margin-top:10px; font-size:12px; line-height:1.5; color:#374151;">
+              <strong>Legend</strong>:
+              <ul style="margin:6px 0 0 18px;">
+                <li><strong>Score</strong>: credit score (0–100) from earnings, attendance and stability</li>
+                <li><strong>Monthly Median</strong>: weekly median earnings × 4</li>
+                <li><strong>Limit</strong>: 1.5 × Monthly Median</li>
+                <li><strong>PD</strong>: Probability of Default (mapped from score)</li>
+                <li><strong>LGD</strong>: Loss Given Default (assumed 40%)</li>
+                <li><strong>EAD</strong>: Exposure At Default (≈ Limit)</li>
+                <li><strong>EL</strong>: Expected Loss = PD × LGD × EAD</li>
+              </ul>
+            </div>
           </div>
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Expected Loss by Driver</h2>
-            <canvas id="uw-el-chart" height="280"></canvas>
+            <canvas id="uw-el-chart" height="260"></canvas>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">PD (%) by Driver</h2>
+            <canvas id="uw-pd-chart" height="260"></canvas>
           </div>
         </section>
       </section>
@@ -399,7 +434,7 @@
           </div>
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Details</h2>
-            <table id="cf-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="cf-table" class="u-table u-head-slate" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Store</th>
@@ -420,14 +455,14 @@
           <select id="city-select-exp" style="padding:6px 8px;"></select>
           <div style="margin-left:auto; opacity:.7;">ROI from demand and capacity gaps</div>
         </section>
-        <section style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Expansion ROI (Top)</h2>
             <canvas id="exp-chart" height="280"></canvas>
           </div>
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Ranked Opportunities</h2>
-            <table id="exp-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="exp-table" class="u-table u-head-lime" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Store</th>
@@ -450,14 +485,14 @@
           <select id="city-select-ret" style="padding:6px 8px;"></select>
           <div style="margin-left:auto; opacity:.7;">At-risk riders & actions</div>
         </section>
-        <section style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+        <section style="display:grid; grid-template-columns: 1fr; gap:16px;">
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Churn Risk by Store</h2>
             <canvas id="ret-chart" height="280"></canvas>
           </div>
           <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; overflow:auto; max-height:420px;">
             <h2 style="margin:0 0 8px 0; font-size:18px;">Playbook</h2>
-            <table id="ret-table" border="0" cellpadding="6" cellspacing="0" style="width:100%; border-collapse: collapse;">
+            <table id="ret-table" class="u-table u-head-rose" border="0" cellpadding="0" cellspacing="0">
               <thead>
                 <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
                   <th>Store</th>
@@ -465,6 +500,79 @@
                   <th>Actions</th>
                 </tr>
               </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-beckn" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <div>Trigger sample Beckn BPP flow</div>
+          <button id="beckn-btn-search" style="margin-left:auto; padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#f9fafb; cursor:pointer;">Search</button>
+          <button id="beckn-btn-select" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#f9fafb; cursor:pointer;">Select</button>
+          <button id="beckn-btn-confirm" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#f9fafb; cursor:pointer;">Confirm</button>
+          <button id="beckn-btn-status" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#f9fafb; cursor:pointer;">Status</button>
+        </section>
+        <section style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; margin-bottom:16px;">
+          <h2 style="margin:0 0 8px 0; font-size:18px;">Launch Stores</h2>
+          <table id="launch-table" class="u-table u-head-green" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Store</th>
+                <th>City</th>
+                <th>Opening</th>
+                <th>Readiness</th>
+                <th>Risk</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+        <section style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+          <h2 style="margin:0 0 8px 0; font-size:18px;">Logs</h2>
+          <pre id="beckn-log" style="white-space:pre-wrap; background:#f8fafc; border:1px solid #e5e7eb; border-radius:6px; padding:8px; max-height:320px; overflow:auto;"></pre>
+        </section>
+      </section>
+
+      <section id="tab-launch" style="display:none;">
+        <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
+          <label for="launch-store"><strong>Store:</strong></label>
+          <select id="launch-store" style="padding:6px 8px; min-width:260px;"></select>
+          <div id="launch-meta" style="margin-left:auto; opacity:.8;"></div>
+          <button id="launch-reprocess" style="margin-left:12px; padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#f9fafb; cursor:pointer;">Rebuild from XLS</button>
+        </section>
+        <section style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Readiness & Insights</h2>
+            <div id="launch-cards" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Staffing by Shift</h2>
+            <canvas id="launch-staff-chart" height="220"></canvas>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Energy Requirements</h2>
+            <div id="launch-energy" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
+            <div style="margin-top:10px;">
+              <canvas id="launch-energy-chart" height="180"></canvas>
+            </div>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">4-week ROI (₹)</h2>
+            <canvas id="launch-roi-chart" height="220"></canvas>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; grid-column: span 2;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">SLA Plan</h2>
+            <table id="launch-sla" class="u-table u-head-slate" border="0" cellpadding="0" cellspacing="0">
+              <thead><tr><th>Target (min)</th><th>Predicted (min)</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div style="padding:12px; border:1px solid #e5e7eb; border-radius:8px; grid-column: span 2;">
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Tasks</h2>
+            <table id="launch-tasks" class="u-table u-head-lime" border="0" cellpadding="0" cellspacing="0">
+              <thead><tr><th>Task</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>
               <tbody></tbody>
             </table>
           </div>

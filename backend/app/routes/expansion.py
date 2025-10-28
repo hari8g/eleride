@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict, Any, List
-import os, json
+import os, json, hashlib
 
 
 router = APIRouter(prefix="/expansion", tags=["expansion"])
@@ -26,7 +26,13 @@ def _load_pack() -> Any:
 
 
 @router.get("/opps")
-def expansion_opportunities(city: str | None = None, weight_gap: float = 0.5, weight_demand: float = 0.5) -> Dict[str, List[Opp]]:
+def expansion_opportunities(
+    city: str | None = None,
+    weight_gap: float = 0.35,
+    weight_demand: float = 0.35,
+    weight_gmv: float = 0.2,
+    weight_stability: float = 0.1,
+) -> Dict[str, List[Opp]]:
     pack = _load_pack()
     out: Dict[str, List[Opp]] = {}
     targets = [city] if city else list(pack.keys())
@@ -53,16 +59,34 @@ def expansion_opportunities(city: str | None = None, weight_gap: float = 0.5, we
                     gap = max(0.0, float(r.get("recommended_riders_day")) - current_day)
                 except Exception:
                     gap = None
-            # expected GMV proxy from earning index
+            # expected GMV proxy from earning index (weekly INR)
             gmv = r.get("store_earning_index")
-            # ROI score blend
-            sc_gap = 0.0 if gap is None else min(1.0, gap/25.0) * 100.0
-            sc_dem = 0.0 if demand is None else float(demand)
-            roi = weight_gap*sc_gap + weight_demand*sc_dem
+            stability = r.get("stability_index")
+
+            # Normalize factor scores 0..100
+            sc_gap = 0.0 if gap is None else min(1.0, gap/25.0) * 100.0  # 25 riders/day gap => 100
+            sc_dem = 0.0 if demand is None else max(0.0, min(100.0, float(demand)))
+            sc_gmv = 0.0 if gmv is None else max(0.0, min(100.0, float(gmv) / 2000.0 * 100.0))  # 2k/wk => 100
+            sc_stb = 0.0 if stability is None else max(0.0, min(100.0, float(stability)))
+
+            # Weighted blend
+            roi_base = (
+                weight_gap*sc_gap +
+                weight_demand*sc_dem +
+                weight_gmv*sc_gmv +
+                weight_stability*sc_stb
+            )
+
+            # Deterministic small variation per store (+/- ~3 points)
+            h = int(hashlib.sha256(store.encode()).hexdigest()[:6], 16) / float(0xFFFFFF)
+            jitter = (h - 0.5) * 6.0
+            roi = max(0.0, min(100.0, roi_base + jitter))
+
             why = []
             if gap and gap > 0: why.append(f"Capacity gap {gap:.1f} riders/day")
             if demand and demand > 60: why.append("Strong demand")
-            if gmv: why.append("High earning index")
+            if gmv and sc_gmv >= 50: why.append("High weekly earnings")
+            if stability and stability >= 60: why.append("Stable payouts")
             rows.append(Opp(store=store, roi_score=round(roi,1), capacity_gap=None if gap is None else round(gap,1), demand_score=None if demand is None else round(float(demand),1), expected_gmv_week=None if gmv is None else round(float(gmv),2), rationale="; ".join(why) if why else "Balanced"))
         # Fallback if no insights: synthesize from payouts/incentives
         if not rows:
@@ -89,17 +113,23 @@ def expansion_opportunities(city: str | None = None, weight_gap: float = 0.5, we
                         demand = None
                 if demand is None and gmv is not None:
                     demand = max(20.0, min(95.0, (gmv / 2000.0) * 100.0))
-                # capacity gap heuristic 5-15 riders/day if demand seems solid
+                # capacity gap heuristic 3-18 riders/day scaled by demand
                 gap = 0.0
                 if demand and demand > 50:
                     gap = max(3.0, min(18.0, (demand - 50.0) / 3.0))
                 sc_gap = min(1.0, gap/25.0) * 100.0
                 sc_dem = 0.0 if demand is None else float(demand)
-                roi = weight_gap*sc_gap + weight_demand*sc_dem
+                sc_gmv = 0.0 if gmv is None else max(0.0, min(100.0, float(gmv) / 2000.0 * 100.0))
+                # stability unknown -> neutral 60
+                sc_stb = 60.0
+                roi_base = weight_gap*sc_gap + weight_demand*sc_dem + weight_gmv*sc_gmv + weight_stability*sc_stb
+                h = int(hashlib.sha256(store.encode()).hexdigest()[:6], 16) / float(0xFFFFFF)
+                jitter = (h - 0.5) * 6.0
+                roi = max(0.0, min(100.0, roi_base + jitter))
                 why = []
                 if gap and gap > 0: why.append(f"Capacity gap {gap:.1f} riders/day")
                 if demand and demand > 60: why.append("Strong demand")
-                if gmv: why.append("High earning index")
+                if gmv and sc_gmv >= 50: why.append("High weekly earnings")
                 rows.append(Opp(store=store, roi_score=round(roi,1), capacity_gap=None if gap is None else round(gap,1), demand_score=None if demand is None else round(float(demand),1), expected_gmv_week=None if gmv is None else round(float(gmv),2), rationale="; ".join(why) if why else "Balanced"))
 
         # sort desc by roi

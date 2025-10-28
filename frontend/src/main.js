@@ -568,6 +568,110 @@ async function initCreditTab() {
   if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
 }
 
+// Launch Planner
+async function fetchLaunchStores() {
+  const r = await fetch(`${API}/launch/stores`);
+  if (!r.ok) return [];
+  return r.json();
+}
+async function fetchLaunchPlan(store) {
+  const r = await fetch(`${API}/launch/${encodeURIComponent(store)}/plan`);
+  if (!r.ok) return null;
+  return r.json();
+}
+async function fetchLaunchTasks(store) {
+  const r = await fetch(`${API}/launch/${encodeURIComponent(store)}/tasks`);
+  if (!r.ok) return [];
+  return r.json();
+}
+
+let launchStaffChart, launchRoiChart, launchEnergyChart;
+async function initLaunchTab() {
+  const sel = document.getElementById('launch-store');
+  const meta = document.getElementById('launch-meta');
+  const stores = await fetchLaunchStores();
+  sel.innerHTML = stores.map(s => `<option value="${s.store}">${s.store} (${s.city||'—'})</option>`).join('');
+  const reproc = document.getElementById('launch-reprocess');
+  if (reproc) {
+    reproc.onclick = async () => {
+      const btn = reproc; btn.disabled = true; btn.textContent = 'Rebuilding...';
+      try {
+        const r = await fetch(`${API}/launch/reprocess`, { method: 'POST' });
+        if (r.ok) {
+          // reload stores and refresh selection
+          const ns = await fetchLaunchStores();
+          sel.innerHTML = ns.map(s => `<option value="${s.store}">${s.store} (${s.city||'—'})</option>`).join('');
+          if (ns.length) { sel.value = ns[0].store; await update(ns[0].store); }
+        }
+      } catch (e) {
+        console.warn('reprocess failed', e);
+      } finally {
+        btn.disabled = false; btn.textContent = 'Rebuild from XLS';
+      }
+    };
+  }
+  async function update(store) {
+    const plan = await fetchLaunchPlan(store);
+    if (!plan) return;
+    meta.textContent = `City: ${plan.city || '—'} | Opening: ${plan.opening_date || '—'}`;
+    // readiness cards
+    const cards = document.getElementById('launch-cards');
+    cards.innerHTML = '';
+    const safeNum = (v, d=0)=>{ const n=Number(v); return Number.isFinite(n)? n : d; };
+    const fmtINR = (v)=> `₹${safeNum(v,0).toLocaleString('en-IN')}`;
+    const addChip = (label, val) => { const s=document.createElement('span'); s.className='chip'; s.innerHTML=`${label}: <strong>${val}</strong>`; cards.appendChild(s); };
+    addChip('Readiness', safeNum((stores.find(x=>x.store===store)||{}).readiness_score ?? null,'—'));
+    addChip('Riders/day', safeNum(plan.staffing?.riders_per_day,'—'));
+    addChip('Buffer %', `${safeNum(plan.staffing?.buffer_pct,0)}%`);
+    addChip('Orders/rider', safeNum(plan.staffing?.target_orders_per_rider,'—'));
+    // (insights removed per request)
+    // staffing bar
+    const sLabels = (plan.staffing?.shifts || []).map(x=>x.name);
+    const sData = (plan.staffing?.shifts || []).map(x=> safeNum(x.riders));
+    const ctxS = document.getElementById('launch-staff-chart');
+    if (launchStaffChart) launchStaffChart.destroy();
+    if (sLabels.length && sData.some(v=>v>0)) {
+      launchStaffChart = new Chart(ctxS, { type:'bar', data:{ labels:sLabels, datasets:[{ label:'Riders', data:sData, backgroundColor:'#10b981'}]}, options:{ plugins:{legend:{display:false}}}});
+    }
+    // energy
+    const e = document.getElementById('launch-energy');
+    e.innerHTML = '';
+    const kwhDay = safeNum(plan.energy?.energy_kwh_day, 0);
+    const swapsDay = safeNum(plan.energy?.swaps_day, 0);
+    addChip('Energy kWh/day', kwhDay);
+    addChip('Swaps/day', swapsDay);
+    const ctxE = document.getElementById('launch-energy-chart');
+    if (launchEnergyChart) launchEnergyChart.destroy();
+    if (ctxE && (kwhDay > 0 || swapsDay > 0)) {
+      launchEnergyChart = new Chart(ctxE, {
+        type: 'bar',
+        data: { labels: ['Energy'], datasets: [
+          { label: 'kWh/day', data: [kwhDay], backgroundColor: '#06b6d4' },
+          { label: 'Swaps/day', data: [swapsDay], backgroundColor: '#f97316' },
+        ]},
+        options: { indexAxis: 'y', plugins:{ legend:{ display:true } }, scales:{ x:{ beginAtZero:true } } }
+      });
+    }
+    // ROI line
+    const labels = ['+1w','+2w','+3w','+4w'];
+    const ctxR = document.getElementById('launch-roi-chart');
+    if (launchRoiChart) launchRoiChart.destroy();
+    const roi = (plan.roi?.weekly_inr || []).map(v=> safeNum(v));
+    if (roi.length && roi.some(v=>v>0)) {
+      launchRoiChart = new Chart(ctxR, { type:'line', data:{ labels, datasets:[{ label:'Weekly INR', data:roi, borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,.15)', fill:true, tension:.2}]}});
+    }
+    // SLA
+    const slaT = document.querySelector('#launch-sla tbody');
+    slaT.innerHTML = `<tr><td class="num">${safeNum(plan.sla?.target_min,'—')}</td><td class="num">${safeNum(plan.sla?.predicted_min,'—')}</td></tr>`;
+    // Tasks
+    const tasks = await fetchLaunchTasks(store);
+    const tb = document.querySelector('#launch-tasks tbody');
+    tb.innerHTML = '';
+    tasks.forEach(t => { const tr=document.createElement('tr'); tr.innerHTML = `<td>${t.task}</td><td>${t.owner}</td><td>${t.due}</td><td>${t.status}</td>`; tb.appendChild(tr); });
+  }
+  sel.addEventListener('change', e => update(e.target.value));
+  if (stores.length) { sel.value = stores[0].store; await update(stores[0].store); }
+}
 // MG Guidance
 async function fetchMG(city) {
   const r = await fetch(`${API}/mg/guidance?city=${encodeURIComponent(city)}`);
@@ -695,7 +799,12 @@ async function initUWTab() {
     const el = rows.slice(0,15).map(r => Number(r.expected_loss_inr || 0));
     const ctx = document.getElementById('uw-el-chart');
     if (window._uw) window._uw.destroy();
-    window._uw = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'Expected Loss (₹)', data:el, backgroundColor:'#f59e0b'}]}, options:{ indexAxis:'y', plugins:{legend:{display:false}}}});
+    window._uw = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'Expected Loss (₹)', data:el, backgroundColor:'#f59e0b'}]}, options:{ indexAxis:'y', plugins:{legend:{display:true}}}});
+
+    const pdVals = rows.slice(0,15).map(r => Number(r.pd || 0) * 100);
+    const ctxpd = document.getElementById('uw-pd-chart');
+    if (window._uwpd) window._uwpd.destroy();
+    window._uwpd = new Chart(ctxpd, { type:'bar', data:{ labels, datasets:[{ label:'PD (%)', data:pdVals, backgroundColor:'#3b82f6'}]}, options:{ indexAxis:'y', plugins:{legend:{display:true}}, scales:{x:{beginAtZero:true, max:25}}}});
   }
   sel.addEventListener('change', e => update(e.target.value));
   if (cities.length) { sel.value = cities[0]; await update(cities[0]); }
@@ -970,6 +1079,8 @@ async function main() {
   const btnCF = document.getElementById('tab-btn-cf');
   const btnEXP = document.getElementById('tab-btn-exp');
   const btnRET = document.getElementById('tab-btn-ret');
+  const btnBeckn = document.getElementById('tab-btn-beckn');
+  const btnLaunch = document.getElementById('tab-btn-launch');
   const tabDemand = document.getElementById('tab-demand');
   const tab3pl = document.getElementById('tab-threepl');
   const tabRide = document.getElementById('tab-ride');
@@ -984,6 +1095,8 @@ async function main() {
   const tabCF = document.getElementById('tab-cf');
   const tabEXP = document.getElementById('tab-exp');
   const tabRET = document.getElementById('tab-ret');
+  const tabBeckn = document.getElementById('tab-beckn');
+  const tabLaunch = document.getElementById('tab-launch');
   function activate(tab) {
     const activeStyle = 'background:#f9fafb;';
     const inactiveStyle = 'background:#fff;';
@@ -1037,6 +1150,12 @@ async function main() {
     } else if (tab === 'ret') {
       tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'none'; tabEnergy.style.display = 'none'; tabMaint.style.display = 'none'; tabUW.style.display = 'none'; tabCF.style.display = 'none'; tabEXP.style.display = 'none'; tabRET.style.display = 'block';
       btnRET.setAttribute('style', btnRET.getAttribute('style').replace('background:#fff;', activeStyle));
+    } else if (tab === 'beckn') {
+      tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'none'; tabEnergy.style.display = 'none'; tabMaint.style.display = 'none'; tabUW.style.display = 'none'; tabCF.style.display = 'none'; tabEXP.style.display = 'none'; tabRET.style.display = 'none'; tabBeckn.style.display = 'block';
+      btnBeckn.setAttribute('style', btnBeckn.getAttribute('style').replace('background:#fff;', activeStyle));
+    } else if (tab === 'launch') {
+      tabDemand.style.display = 'none'; tab3pl.style.display = 'none'; tabRide.style.display = 'none'; tabInc.style.display = 'none'; tabPay.style.display = 'none'; tabHot.style.display = 'none'; tabCredit.style.display = 'none'; tabMG.style.display = 'none'; tabEnergy.style.display = 'none'; tabMaint.style.display = 'none'; tabUW.style.display = 'none'; tabCF.style.display = 'none'; tabEXP.style.display = 'none'; tabRET.style.display = 'none'; tabBeckn.style.display = 'none'; tabLaunch.style.display = 'block';
+      btnLaunch.setAttribute('style', btnLaunch.getAttribute('style').replace('background:#fff;', activeStyle));
     }
   }
   btnDemand.addEventListener('click', async () => { activate('demand'); await initDemandTab(); });
@@ -1053,6 +1172,39 @@ async function main() {
   btnCF.addEventListener('click', async () => { activate('cf'); await initCFTab(); });
   btnEXP.addEventListener('click', async () => { activate('exp'); await initEXPTab(); });
   btnRET.addEventListener('click', async () => { activate('ret'); await initRETTab(); });
+  btnBeckn.addEventListener('click', async () => { activate('beckn'); });
+  btnLaunch.addEventListener('click', async () => { activate('launch'); await initLaunchTab(); });
+
+  // Beckn admin button handlers
+  const log = (m) => { const el = document.getElementById('beckn-log'); el.textContent = (el.textContent + (el.textContent ? '\n' : '') + m).slice(-4000); };
+  const post = async (p) => { const r = await fetch(`${API}${p}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ context:{}, message:{} }) }); log(p+': '+r.status+' '+(await r.text()).slice(0,500)); };
+  const b1 = document.getElementById('beckn-btn-search'); if (b1) b1.onclick = () => post('/beckn/bpp/search');
+  const b2 = document.getElementById('beckn-btn-select'); if (b2) b2.onclick = () => post('/beckn/bpp/select');
+  const b3 = document.getElementById('beckn-btn-confirm'); if (b3) b3.onclick = () => post('/beckn/bpp/confirm');
+  const b4 = document.getElementById('beckn-btn-status'); if (b4) b4.onclick = () => post('/beckn/bpp/status');
+
+  // Populate launch stores in Beckn admin
+  try {
+    const r = await fetch(`${API}/launch/stores`);
+    if (r.ok) {
+      const rows = await r.json();
+      const tb = document.querySelector('#launch-table tbody');
+      if (tb) {
+        tb.innerHTML = '';
+        rows.forEach(x => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${x.store}</td>
+            <td>${x.city || '—'}</td>
+            <td>${x.opening_date || '—'}</td>
+            <td class="num">${x.readiness_score}</td>
+            <td>${x.risk || '—'}</td>
+          `;
+          tb.appendChild(tr);
+        });
+      }
+    }
+  } catch {}
 
   // default view
   await initDemandTab();

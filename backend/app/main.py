@@ -22,6 +22,8 @@ from .routes import underwriting as uw_routes
 from .routes import cashflow as cf_routes
 from .routes import expansion as exp_routes
 from .routes import retention as ret_routes
+from .beckn import routers as beckn_routes
+from .routes import launch as launch_routes
 
 
 def create_app() -> FastAPI:
@@ -76,6 +78,8 @@ def create_app() -> FastAPI:
     app.include_router(cf_routes.router)
     app.include_router(exp_routes.router)
     app.include_router(ret_routes.router)
+    app.include_router(beckn_routes.router)
+    app.include_router(launch_routes.router)
 
     # Avoid 307 redirects by serving both slash and no-slash at root
     @app.get("/")
