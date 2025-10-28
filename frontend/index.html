@@ -33,6 +33,26 @@
       .bar{background:#e5e7eb;border-radius:6px;overflow:hidden;height:10px}
       .bar-fill{background:#10b981;height:100%}
       .table-sm td{border-bottom:1px solid #f3f4f6}
+      /* Sidebar layout */
+      .layout{display:flex;gap:16px}
+      .sidebar{width:220px;border:1px solid var(--card-border);border-radius:10px;padding:10px;height:fit-content;position:sticky;top:16px}
+      .tab-btn{display:block;width:100%;text-align:left;padding:10px 12px;margin:4px 0;border:1px solid #e5e7eb;border-radius:8px;background:#fff;cursor:pointer;font-size:14px}
+      .color-demand{border-left:6px solid #10b981}
+      .color-3pl{border-left:6px solid #f59e0b}
+      .color-ride{border-left:6px solid #6366f1}
+      .color-inc{border-left:6px solid #8b5cf6}
+      .color-pay{border-left:6px solid #0ea5e9}
+      .color-hot{border-left:6px solid #ef4444}
+      .color-credit{border-left:6px solid #334155}
+      .color-mg{border-left:6px solid #4f46e5}
+      .color-energy{border-left:6px solid #06b6d4}
+      .color-maint{border-left:6px solid #fb7185}
+      .color-uw{border-left:6px solid #2563eb}
+      .color-cf{border-left:6px solid #475569}
+      .color-exp{border-left:6px solid #65a30d}
+      .color-ret{border-left:6px solid #e11d48}
+      .color-beckn{border-left:6px solid #0891b2}
+      .color-launch{border-left:6px solid #22c55e}
     </style>
     <!-- Preload Leaflet CSS to ensure map renders even if JS loads late -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -42,26 +62,26 @@
       <h1 style="margin-bottom: 8px;">Eleride-Bosch EV fleet orchestrator</h1>
       <div id="status" style="margin-bottom: 16px;">Checking backend...</div>
 
-      <nav style="display:flex; gap:8px; margin-bottom: 12px;">
-        <button id="tab-btn-demand" data-tab="demand" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#f9fafb; cursor:pointer;">Demand</button>
-        <button id="tab-btn-3pl" data-tab="threepl" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">3PL Capacity</button>
-        <button id="tab-btn-ride" data-tab="ride" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Per-ride Earnings</button>
-        <button id="tab-btn-incentives" data-tab="incentives" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Incentives</button>
-        <button id="tab-btn-payouts" data-tab="payouts" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Payouts</button>
-        <button id="tab-btn-hotspots" data-tab="hotspots" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Hotspots</button>
-        <button id="tab-btn-credit" data-tab="credit" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Credit Profiles</button>
-        <button id="tab-btn-mg" data-tab="mg" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">MG Guidance</button>
-        <button id="tab-btn-energy" data-tab="energy" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Energy Demand</button>
-        <button id="tab-btn-maint" data-tab="maint" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Maintenance</button>
-        <button id="tab-btn-uw" data-tab="uw" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Credit Underwriting</button>
-        <button id="tab-btn-cf" data-tab="cf" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Cashflow</button>
-        <button id="tab-btn-exp" data-tab="exp" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Expansion</button>
-        <button id="tab-btn-ret" data-tab="ret" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Retention</button>
-        <button id="tab-btn-beckn" data-tab="beckn" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Beckn (Admin)</button>
-        <button id="tab-btn-launch" data-tab="launch" style="padding:8px 12px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer;">Launch Planner</button>
-      </nav>
-
-      
+      <div class="layout">
+        <aside class="sidebar">
+          <button id="tab-btn-demand" data-tab="demand" class="tab-btn color-demand" style="background:#f9fafb;">Demand</button>
+          <button id="tab-btn-3pl" data-tab="threepl" class="tab-btn color-3pl" style="background:#fff;">3PL Capacity</button>
+          <button id="tab-btn-ride" data-tab="ride" class="tab-btn color-ride" style="background:#fff;">Per-ride Earnings</button>
+          <button id="tab-btn-incentives" data-tab="incentives" class="tab-btn color-inc" style="background:#fff;">Incentives</button>
+          <button id="tab-btn-payouts" data-tab="payouts" class="tab-btn color-pay" style="background:#fff;">Payouts</button>
+          <button id="tab-btn-hotspots" data-tab="hotspots" class="tab-btn color-hot" style="background:#fff;">Hotspots</button>
+          <button id="tab-btn-credit" data-tab="credit" class="tab-btn color-credit" style="background:#fff;">Credit Profiles</button>
+          <button id="tab-btn-mg" data-tab="mg" class="tab-btn color-mg" style="background:#fff;">MG Guidance</button>
+          <button id="tab-btn-energy" data-tab="energy" class="tab-btn color-energy" style="background:#fff;">Energy Demand</button>
+          <button id="tab-btn-maint" data-tab="maint" class="tab-btn color-maint" style="background:#fff;">Maintenance</button>
+          <button id="tab-btn-uw" data-tab="uw" class="tab-btn color-uw" style="background:#fff;">Credit Underwriting</button>
+          <button id="tab-btn-cf" data-tab="cf" class="tab-btn color-cf" style="background:#fff;">Cashflow</button>
+          <button id="tab-btn-exp" data-tab="exp" class="tab-btn color-exp" style="background:#fff;">Expansion</button>
+          <button id="tab-btn-ret" data-tab="ret" class="tab-btn color-ret" style="background:#fff;">Retention</button>
+          <button id="tab-btn-beckn" data-tab="beckn" class="tab-btn color-beckn" style="background:#fff;">Beckn (Admin)</button>
+          <button id="tab-btn-launch" data-tab="launch" class="tab-btn color-launch" style="background:#fff;">Launch Planner</button>
+        </aside>
+        <main style="flex:1;">
 
       <section id="tab-demand" style="display:none;">
         <section style="margin: 16px 0; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; display:flex; gap:12px; align-items:center;">
@@ -578,6 +598,8 @@
           </div>
         </section>
       </section>
+        </main>
+      </div>
     </div>
 
     <!-- Ensure Leaflet is available globally before our module initializes the map -->
